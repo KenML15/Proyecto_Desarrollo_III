@@ -1,2 +1,11 @@
-com\mycompany\proyecto_desarrollo_iii\resources\JakartaEE8Resource.class
-com\mycompany\proyecto_desarrollo_iii\JakartaRestConfiguration.class
+model\data\JakartaRestConfiguration.class
+model\dao\DbConnection.class
+model\dao\CustomerDAO.class
+model\entity\Space.class
+model\entity\Vehicle.class
+model\entity\VehicleType.class
+model\entity\JakartaEE8Resource.class
+model\entity\ParkingLot.class
+Pruebas\main.class
+model\entity\Ticket.class
+model\entity\Customer.class

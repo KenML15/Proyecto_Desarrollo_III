@@ -1,4 +1,4 @@
-package com.mycompany.proyecto_desarrollo_iii;
+package model.data;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;

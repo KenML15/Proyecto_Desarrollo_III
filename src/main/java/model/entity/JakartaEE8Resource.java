@@ -1,4 +1,4 @@
-package com.mycompany.proyecto_desarrollo_iii.resources;
+package model.entity;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
