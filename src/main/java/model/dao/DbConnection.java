@@ -20,6 +20,6 @@ public class DbConnection {
             return DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (ClassNotFoundException e) {
             throw new SQLException("Driver no encontrado", e);
-        } 
+        }
     }
 }

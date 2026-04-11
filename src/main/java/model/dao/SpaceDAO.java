@@ -11,44 +11,46 @@ package model.dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import model.entity.VehicleType;
+import model.entity.Space;
 
-public class VehicleTypeDAO {
+public class SpaceDAO {
 
-    public List<VehicleType> findAll() {
-        List<VehicleType> list = new ArrayList<>();
-        String sql = "SELECT * FROM vehicle_type";
+    // 1. Buscar todos los espacios disponibles
+    public List<Space> findAvailable() {
+        List<Space> list = new ArrayList<>();
+        String sql = "SELECT * FROM space WHERE space_taken = FALSE";
 
         try (Connection conn = DbConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
-                VehicleType vType = new VehicleType(
+                list.add(new Space(
                     rs.getInt("id"),
-                    rs.getString("description"),
-                    rs.getInt("number_of_tires"),
-                    rs.getFloat("fee")
-                );
-                list.add(vType);
+                    rs.getBoolean("disability_adaptation"),
+                    rs.getBoolean("space_taken")
+                ));
             }
         } catch (SQLException e) {
-            System.out.println("Error al listar tipos: " + e.getMessage());
+            System.out.println("Error al buscar espacios: " + e.getMessage());
         }
         return list;
     }
 
-    public boolean insert(VehicleType type) {
-        String sql = "INSERT INTO vehicle_type (description, number_of_tires, fee) VALUES (?, ?, ?)";
+    // 2. Cambiar el estado del espacio (Ocupar o Liberar)
+    public boolean updateStatus(int id, boolean isTaken) {
+        String sql = "UPDATE space SET space_taken = ? WHERE id = ?";
+        
         try (Connection conn = DbConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
-            pstmt.setString(1, type.getDescription());
-            pstmt.setInt(2, type.getNumberOfTires());
-            pstmt.setFloat(3, type.getFee());
+            pstmt.setBoolean(1, isTaken);
+            pstmt.setInt(2, id);
             
             return pstmt.executeUpdate() > 0;
+            
         } catch (SQLException e) {
+            System.out.println("Error al actualizar espacio: " + e.getMessage());
             return false;
         }
     }
