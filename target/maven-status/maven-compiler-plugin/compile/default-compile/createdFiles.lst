@@ -2,6 +2,7 @@ model\entity\Space.class
 model\entity\Vehicle.class
 model\dao\SpaceDAO.class
 model\entity\VehicleType.class
+controller\CustomerController.class
 model\dao\VehicleTypeDAO.class
 model\entity\ParkingLot.class
 model\entity\Customer.class

@@ -1,0 +1,143 @@
+/* =========================================
+   1. ESTILOS GENERALES (Base)
+   ========================================= */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+}
+
+#boton_volver {
+    display: inline-block !important; 
+    padding: 10px 20px !important;
+    background-color: #007bff !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 5px !important;
+    cursor: pointer !important;
+    font-family: Arial, sans-serif !important;
+    margin-top: 20px !important;
+    text-decoration: none !important;
+}
+
+#boton_volver:hover {
+    background-color: #0056b3 !important;
+}
+
+#titulo {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* =========================================
+   2. LAYOUT Y CONTENEDORES
+   ========================================= */
+.container {
+    width: 420px;
+    margin: 60px auto;
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    color: white;
+}
+
+/* =========================================
+   3. FORMULARIOS Y CAMPOS
+   ========================================= */
+.container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+input[type=text],
+input[type=password] {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0 15px 0;
+    border: none;
+    border-radius: 5px;
+    box-sizing: border-box; /* Asegura que el padding no desborde el ancho */
+}
+
+/* Contenedor de botones */
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+/* Estilo base para botones de envío/acción */
+input[type=submit],
+input[type=button] {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.save {
+    background: lightgreen;
+    color: #333;
+}
+
+.cancel {
+    background: tomato;
+    color: white;
+}
+
+.contenedor-centrado {
+    text-align: center; /* Centra elementos inline o inline-block como tu botón */
+    width: 100%;        /* Asegura que ocupe todo el ancho para poder centrar */
+    margin-top: 20px;   /* Espacio opcional arriba */
+}
+
+/* =========================================
+   4. TABLAS
+   ========================================= */
+table {
+    margin: 40px auto;
+    border-collapse: collapse;
+    width: 70%;
+    background-color: white; /* Opcional: para que resalte sobre el fondo */
+}
+
+th, td {
+    border: 1px solid #333;
+    padding: 10px;
+    text-align: center;
+    color: #333;
+}
+
+th {
+    background-color: lightgreen;
+}
+
+/* =========================================
+   5. ANIMACIONES (Marquee)
+   ========================================= */
+.marquee {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-top: 20px;
+}
+
+.marquee span {
+    display: inline-block;
+    padding-left: 100%;
+    animation: marquee 12s linear infinite;
+    color: lightgreen;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+@keyframes marquee {
+    0%   {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
