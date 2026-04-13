@@ -27,7 +27,7 @@
                     <th>Color</th>
                     <th>Acciones</th>
                 </tr>
-                <c:forEach var="v" items="${listaVehiculos}">
+                <c:forEach var="v" items="${vehicles}">
                     <tr>
                         <td><c:out value="${v.plate}"/></td>
                         <td><c:out value="${v.brand}"/></td>
