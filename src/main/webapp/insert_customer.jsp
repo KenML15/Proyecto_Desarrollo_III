@@ -43,7 +43,7 @@
         </div>
         <div class="contenedor-centrado">
             <button type="button" id="boton_volver" onclick="history.back()">
-                Volver atrás
+                Volver al inicio
             </button>
         </div>
     </body>

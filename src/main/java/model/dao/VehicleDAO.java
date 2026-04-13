@@ -18,33 +18,49 @@ public class VehicleDAO {
 
     public boolean insert(Vehicle vehicle, int idVehicleType) {
         String sql = "INSERT INTO vehicle (plate, color, brand, model, id_vehicle_type) VALUES (?, ?, ?, ?, ?)";
-        
-        try (Connection conn = DbConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            
+
+        try (Connection conn = DbConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
             pstmt.setString(1, vehicle.getPlate());
             pstmt.setString(2, vehicle.getColor());
             pstmt.setString(3, vehicle.getBrand());
             pstmt.setString(4, vehicle.getModel());
-            pstmt.setInt(5, idVehicleType); // Pasamos el ID del tipo
-            
+            pstmt.setInt(5, idVehicleType);
+
             return pstmt.executeUpdate() > 0;
-            
+
         } catch (SQLException e) {
-            System.out.println("Error al insertar vehículo: " + e.getMessage());
+            System.out.println("Error en VehicleDAO.insert: " + e.getMessage());
             return false;
         }
     }
 
+    public Vehicle findByPlate(String plate) {
+        String sql = "SELECT * FROM vehicle WHERE plate = ?";
+        try (Connection conn = DbConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, plate);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return new Vehicle(
+                        rs.getString("plate"),
+                        rs.getString("color"),
+                        rs.getString("brand"),
+                        rs.getString("model")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public List<Vehicle> findAll() {
         List<Vehicle> list = new ArrayList<>();
-        
-        String sql = "SELECT v.*, vt.description, vt.fee FROM vehicle v " +
-                     "JOIN vehicle_type vt ON v.id_vehicle_type = vt.id";
+        String sql = "SELECT * FROM vehicle";
 
-        try (Connection conn = DbConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
+        try (Connection conn = DbConnection.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 Vehicle v = new Vehicle();
@@ -52,15 +68,45 @@ public class VehicleDAO {
                 v.setColor(rs.getString("color"));
                 v.setBrand(rs.getString("brand"));
                 v.setModel(rs.getString("model"));
-                
-                // VehicleType type = new VehicleType(rs.getInt("id_vehicle_type"), rs.getString("description"), 0, rs.getFloat("fee"));
-                // v.setType(type);
-                
                 list.add(v);
             }
         } catch (SQLException e) {
-            System.out.println("Error al listar vehículos: " + e.getMessage());
+            System.err.println("Error en VehicleDAO: " + e.getMessage());
         }
         return list;
+    }
+
+    public boolean delete(String plate) {
+        String sql = "DELETE FROM vehicle WHERE plate = ?";
+
+        try (Connection conn = DbConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, plate);
+            return pstmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error al eliminar vehículo: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean update(Vehicle v, int idVehicleType) {
+
+        String sql = "UPDATE vehicle SET color = ?, brand = ?, model = ?, id_vehicle_type = ? WHERE plate = ?";
+
+        try (Connection conn = DbConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, v.getColor());
+            pstmt.setString(2, v.getBrand());
+            pstmt.setString(3, v.getModel());
+            pstmt.setInt(4, idVehicleType);
+            pstmt.setString(5, v.getPlate());
+
+            return pstmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar vehículo: " + e.getMessage());
+            return false;
+        }
     }
 }

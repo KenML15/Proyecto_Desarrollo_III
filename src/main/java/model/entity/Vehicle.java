@@ -16,15 +16,12 @@ public class Vehicle {
     private String model;
     private VehicleType type;
 
-    public Vehicle(String plate, String color, String brand, String model, VehicleType type) {
+    public Vehicle(String plate, String color, String brand, String model) {
         this.plate = plate;
         this.color = color;
         this.brand = brand;
         this.model = model;
-        this.type = type;
     }
-
-   
 
     public Vehicle() {
     }
@@ -68,7 +65,5 @@ public class Vehicle {
     public void setType(VehicleType type) {
         this.type = type;
     }
-    
-    
 
 }
