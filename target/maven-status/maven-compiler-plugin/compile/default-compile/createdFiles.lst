@@ -11,6 +11,7 @@ model\dao\DbConnection.class
 model\dao\CustomerDAO.class
 model\dao\TicketDAO.class
 model\dao\VehicleDAO.class
+controller\VehicleController.class
 model\entity\JakartaEE8Resource.class
 Pruebas\main.class
 model\entity\Ticket.class

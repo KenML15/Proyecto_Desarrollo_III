@@ -9,14 +9,14 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Ingreso de vehiculos</title>
+        <title>Ingreso de vehículos</title>
         <link rel="stylesheet" href="CSS/style.css"/>
     </head>
     <body>
         
         <div id="titulo">
 
-            <h2>Ingreso de Clientes</h2>
+            <h2>Ingreso de Vehículos</h2>
 
         </div>
 

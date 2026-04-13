@@ -21,7 +21,7 @@ public class VehicleType {
         this.numberOfTires = numberOfTires;
         this.fee = fee;
     }
-
+    
     public VehicleType() {
     }
 

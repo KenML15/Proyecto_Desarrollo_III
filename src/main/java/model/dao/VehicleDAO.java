@@ -16,6 +16,7 @@ import model.entity.VehicleType;
 
 public class VehicleDAO {
 
+    //create
     public boolean insert(Vehicle vehicle, int idVehicleType) {
         String sql = "INSERT INTO vehicle (plate, color, brand, model, id_vehicle_type) VALUES (?, ?, ?, ?, ?)";
         
@@ -36,6 +37,7 @@ public class VehicleDAO {
         }
     }
 
+    //read
     public List<Vehicle> findAll() {
         List<Vehicle> list = new ArrayList<>();
         
@@ -62,5 +64,10 @@ public class VehicleDAO {
             System.out.println("Error al listar vehículos: " + e.getMessage());
         }
         return list;
+    }
+
+    //update
+    public void update(Vehicle vehicle) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

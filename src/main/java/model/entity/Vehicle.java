@@ -16,13 +16,22 @@ public class Vehicle {
     private String model;
     private VehicleType type;
 
-    public Vehicle(String plate, String color, String brand, String model, VehicleType type) {
-        this.plate = plate;
-        this.color = color;
-        this.brand = brand;
-        this.model = model;
-        this.type = type;
-    }
+    //constructor completo
+//    public Vehicle(String plate, String color, String brand, String model, VehicleType type) {
+//        this.plate = plate;
+//        this.color = color;
+//        this.brand = brand;
+//        this.model = model;
+//        this.type = type;
+//    }
+    
+    //constructor temporal para el controller 14 abril
+    public Vehicle(String plate, String color, String brand, String model) {
+    this.plate = plate;
+    this.color = color;
+    this.brand = brand;
+    this.model = model;
+}
 
    
 
