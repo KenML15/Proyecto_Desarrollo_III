@@ -16,7 +16,7 @@ public class Vehicle {
     private String model;
     private VehicleType type;
 
-    //constructor completo
+     //constructor completo
 //    public Vehicle(String plate, String color, String brand, String model, VehicleType type) {
 //        this.plate = plate;
 //        this.color = color;
@@ -25,19 +25,18 @@ public class Vehicle {
 //        this.type = type;
 //    }
     
-    //constructor temporal para el controller 14 abril
+    //CONSTRUCTOR TEMPORAL
     public Vehicle(String plate, String color, String brand, String model) {
-    this.plate = plate;
-    this.color = color;
-    this.brand = brand;
-    this.model = model;
-}
-
-   
+        this.plate = plate;
+        this.color = color;
+        this.brand = brand;
+        this.model = model;
+    }
 
     public Vehicle() {
     }
 
+    // Getters y Setters
     public String getPlate() {
         return plate;
     }
@@ -77,7 +76,4 @@ public class Vehicle {
     public void setType(VehicleType type) {
         this.type = type;
     }
-    
-    
-
 }

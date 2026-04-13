@@ -11,44 +11,43 @@ package model.dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import model.entity.Vehicle;
 import model.entity.VehicleType;
 
 public class VehicleTypeDAO {
 
-    public List<VehicleType> findAll() {
-        List<VehicleType> list = new ArrayList<>();
-        String sql = "SELECT * FROM vehicle_type";
+    public List<Vehicle> findAll() {
+        List<Vehicle> list = new ArrayList<>();
+        String sql = "SELECT * FROM vehicle";
 
-        try (Connection conn = DbConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
+        try (Connection conn = DbConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
-                VehicleType vType = new VehicleType(
-                    rs.getInt("id"),
-                    rs.getString("description"),
-                    rs.getInt("number_of_tires"),
-                    rs.getFloat("fee")
-                );
-                list.add(vType);
+                Vehicle v = new Vehicle();
+                v.setPlate(rs.getString("plate"));
+                v.setColor(rs.getString("color"));
+                v.setBrand(rs.getString("brand"));
+                v.setModel(rs.getString("model"));
+                list.add(v);
             }
+            System.out.println("LOG: Se cargaron " + list.size() + " vehículos del DAO.");
         } catch (SQLException e) {
-            System.out.println("Error al listar tipos: " + e.getMessage());
+            System.out.println("Error al listar vehículos: " + e.getMessage());
         }
         return list;
     }
 
     public boolean insert(VehicleType type) {
-        String sql = "INSERT INTO vehicle_type (description, number_of_tires, fee) VALUES (?, ?, ?)";
-        try (Connection conn = DbConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            
-            pstmt.setString(1, type.getDescription());
-            pstmt.setInt(2, type.getNumberOfTires());
-            pstmt.setFloat(3, type.getFee());
-            
-            return pstmt.executeUpdate() > 0;
+
+        String sql = "INSERT IGNORE INTO vehicle_type (id, description, number_of_tires, fee) VALUES (?, ?, ?, ?)";
+        try (Connection conn = DbConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, type.getId());
+            pstmt.setString(2, type.getDescription());
+            pstmt.setInt(3, type.getNumberOfTires());
+            pstmt.setFloat(4, type.getFee());
+            return pstmt.executeUpdate() >= 0;
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }

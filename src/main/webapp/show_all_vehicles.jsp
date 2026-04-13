@@ -1,7 +1,7 @@
 <%-- 
     Document   : show_all_vehicles
-    Created on : 12 abr 2026, 10:24:36 p. m.
-    Author     : pablo
+    Created on : 10 abr 2026
+    Author     : Kenneth
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -15,10 +15,10 @@
     </head>
     <body>
         <div id="titulo">
-            <h2>Gestión de Vehículos</h2>
+            <h2>Vehículos Registrados</h2>
         </div>
 
-        <div class="container" style="max-width: 900px;">
+        <div class="container" style="max-width: 800px;">
             <table border="1" id="table" style="width: 100%; border-collapse: collapse;">
                 <tr id="encabezado">
                     <th>Placa</th>
@@ -27,7 +27,7 @@
                     <th>Color</th>
                     <th>Acciones</th>
                 </tr>
-                <c:forEach items="${vehicles}" var="v">
+                <c:forEach var="v" items="${listaVehiculos}">
                     <tr>
                         <td><c:out value="${v.plate}"/></td>
                         <td><c:out value="${v.brand}"/></td>
@@ -35,7 +35,7 @@
                         <td><c:out value="${v.color}"/></td>
                         <td>
                             <a href="vehicles?action=edit&plate=${v.plate}" class="save" style="padding: 5px 10px; text-decoration: none; font-size: 0.8rem;">Editar</a>
-                            <a href="vehicles?action=delete&plate=${v.plate}" class="cancel" style="padding: 5px 10px; text-decoration: none; font-size: 0.8rem;" onclick="return confirm('¿Eliminar vehículo?')">Eliminar</a>
+                            <a href="vehicles?action=delete&plate=${v.plate}" class="cancel" style="padding: 5px 10px; text-decoration: none; font-size: 0.8rem;" onclick="return confirm('¿Seguro que desea eliminar el vehículo ${v.plate}?')">Eliminar</a>
                         </td>
                     </tr>
                 </c:forEach>
