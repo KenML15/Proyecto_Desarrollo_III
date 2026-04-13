@@ -25,6 +25,29 @@ body {
     align-items: center;
 }
 
+#session-bar {
+    text-align: right;
+    padding: 10px 20px;
+}
+#btn-login {
+    background-color: red;
+    text-align: right;
+    color: white;
+    padding: 8px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+#btn-logout {
+    background-color: #f44336;
+    color: white;
+    padding: 8px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+
+}
+
 /* =========================================
    2. ENCABEZADOS
    ========================================= */
@@ -107,7 +130,7 @@ input:focus {
     margin-top: 10px;
 }
 
-input[type=submit], 
+input[type=submit],
 .save {
     flex: 2;
     background: var(--primary);
@@ -120,7 +143,7 @@ input[type=submit],
     transition: transform 0.2s, background 0.3s;
 }
 
-input[type=reset], 
+input[type=reset],
 .cancel {
     flex: 1;
     background: rgba(255, 255, 255, 0.05);

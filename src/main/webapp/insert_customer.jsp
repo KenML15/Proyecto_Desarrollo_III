@@ -1,9 +1,3 @@
-<%-- 
-    Document   : insert_customer
-    Created on : 10 abr 2026, 11:28:58 p. m.
-    Author     : pablo
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -15,34 +9,35 @@
     <body>
 
         <div id="titulo">
-
             <h2>Ingreso de Clientes</h2>
-
         </div>
 
         <div class="container">
-
             <h2>Formulario de ingreso</h2>
 
             <form action="customers" method="post">
+                <label>ID / Cédula</label>
+                <input type="number" name="id">
 
-                <label>Id</label>
-                <input type="text" name="id">
+                <label>Nombre Completo</label>
+                <input type="text" name="name" required placeholder="Nombre del cliente">
 
-                <label>Name</label>
-                <input type="text" name="name">
-
-                <label>Disability</label>
-                <input type="text" name="discapacity">
+                <div style="margin: 20px 0; display: flex; align-items: center; gap: 10px;">
+                    <input type="checkbox" name="discapacity" id="discapacity" style="width: auto; margin: 0;">
+                    <label for="discapacity" style="margin: 0; font-weight: normal;">
+                        ¿El cliente presenta alguna discapacidad?
+                    </label>
+                </div>
 
                 <div class="buttons">
                     <input type="submit" value="Guardar cliente" class="save">
-                    <input type="reset" value="Cancelar" class="cancel">
+                    <input type="reset" value="Limpiar" class="cancel">
                 </div>
             </form>
         </div>
-        <div class="contenedor-centrado">
-            <button type="button" id="boton_volver" onclick="history.back()">
+
+        <div class="contenedor-centrado" style="text-align: center; margin-top: 20px;">
+            <button type="button" id="boton_volver" onclick="location.href='main_menu.html'" class="cancel" style="padding: 10px 20px;">
                 Volver al inicio
             </button>
         </div>

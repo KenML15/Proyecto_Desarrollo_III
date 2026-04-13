@@ -24,7 +24,7 @@ public class main {
         CustomerDAO customerDAO = new CustomerDAO();
         Customer cliente = new Customer(102, "Kenneth Lopez", true);
         if (customerDAO.insert(cliente)) {
-            System.out.println("✅ Cliente insertado.");
+            System.out.println("Cliente insertado.");
         }
 
         // 2. Probar Tipo de Vehículo (Si ya insertaste por SQL, busquemos el ID 1)
@@ -40,19 +40,19 @@ public class main {
         carro.setModel("Corolla");
         
         if (vehicleDAO.insert(carro, idMoto)) {
-            System.out.println("✅ Vehículo insertado y asociado al tipo.");
+            System.out.println("Vehículo insertado y asociado al tipo.");
         }
 
         // 4. Probar Espacio (Ocupar el espacio 1)
         SpaceDAO spaceDAO = new SpaceDAO();
         if (spaceDAO.updateStatus(1, true)) {
-            System.out.println("✅ Espacio #1 marcado como OCUPADO.");
+            System.out.println("Espacio #1 marcado como OCUPADO.");
         }
 
         // 5. Probar Ticket (Entrada)
         TicketDAO ticketDAO = new TicketDAO();
         if (ticketDAO.openTicket(101, "ABC-123", 1)) {
-            System.out.println("✅ Ticket de entrada CREADO exitosamente.");
+            System.out.println("Ticket de entrada CREADO exitosamente.");
         }
 
         System.out.println("\n--- PRUEBA FINALIZADA: Revisa tu phpMyAdmin ---");

@@ -61,35 +61,42 @@ public class VehicleController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
 
-        request.setCharacterEncoding("UTF-8");
-        String action = request.getParameter("action");
+    request.setCharacterEncoding("UTF-8");
+    String action = request.getParameter("action");
 
-        try {
-            String plate = request.getParameter("plate");
-            String color = request.getParameter("color");
-            String brand = request.getParameter("brand");
-            String model = request.getParameter("model");
-            
-            // Validamos que el ID venga del formulario
-            String idStr = request.getParameter("id");
-            int typeId = (idStr != null) ? Integer.parseInt(idStr) : 1;
+    try {
+        String plate = request.getParameter("plate");
+        String color = request.getParameter("color");
+        String brand = request.getParameter("brand");
+        String model = request.getParameter("model");
+        
+        // Buscamos "typeId" que es como lo nombramos en el JSP
+        String typeIdStr = request.getParameter("typeId");
+        int typeId = (typeIdStr != null && !typeIdStr.isEmpty()) ? Integer.parseInt(typeIdStr) : 1;
 
-            Vehicle vehicle = new Vehicle(plate, color, brand, model);
+        Vehicle vehicle = new Vehicle(plate, color, brand, model);
 
-            if ("update".equalsIgnoreCase(action)) {
-                vehicleDAO.update(vehicle, typeId);
-            } else {
-                vehicleDAO.insert(vehicle, typeId);
-            }
-
-            response.sendRedirect("vehicles");
-
-        } catch (NumberFormatException e) {
-            System.out.println("Error en datos numéricos: " + e.getMessage());
-            response.sendRedirect("vehicles");
+        boolean success = false;
+        if ("update".equalsIgnoreCase(action)) {
+            success = vehicleDAO.update(vehicle, typeId);
+        } else {
+            success = vehicleDAO.insert(vehicle, typeId);
         }
+
+        if (success) {
+            response.sendRedirect("vehicles");
+        } else {
+            // Si el DAO devuelve false, algo falló en la BD (llave foránea, placa duplicada, etc)
+            System.out.println("Error: El DAO no pudo insertar en la BD.");
+            response.sendRedirect("insert_vehicle.jsp?error=db");
+        }
+
+    } catch (NumberFormatException e) {
+        System.out.println("Error en datos numéricos: " + e.getMessage());
+        response.sendRedirect("insert_vehicle.jsp?error=format");
     }
+}
 }

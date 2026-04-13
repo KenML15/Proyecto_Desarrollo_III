@@ -10,6 +10,7 @@ model\entity\ParkingLot.class
 model\entity\Customer.class
 model\data\JakartaRestConfiguration.class
 model\dao\DbConnection.class
+controller\LoginController.class
 model\dao\CustomerDAO.class
 model\dao\TicketDAO.class
 model\dao\VehicleDAO.class

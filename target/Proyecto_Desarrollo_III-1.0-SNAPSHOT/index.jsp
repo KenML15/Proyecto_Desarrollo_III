@@ -22,7 +22,7 @@
     <body>
         <%-- Redirección mediante Java Scriptlet (Ejecución inmediata en servidor) --%>
         <%
-            response.sendRedirect("main_menu.html");
+            response.sendRedirect("login.jsp");
         %>
         
         <div style="text-align: center; margin-top: 50px; font-family: Arial, sans-serif;">

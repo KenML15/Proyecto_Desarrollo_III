@@ -13,7 +13,7 @@
         <link rel="stylesheet" href="CSS/style.css"/>
     </head>
     <body>
-        
+
         <div id="titulo">
 
             <h2>Ingreso de Vehículos</h2>
@@ -21,34 +21,24 @@
         </div>
 
         <div class="container">
-            
+
             <h2>Formulario de ingreso</h2>
 
-            <form action="vehicles"  method="post">
-
-                <label>Plate</label>
-                <input type="text" name="plate">
+            <form action="vehicles" method="post">
+                <label>Plate (Placa)</label>
+                <input type="text" name="plate" required>
 
                 <label>Color</label>
                 <input type="text" name="color">
 
-                <label>Brand</label>
+                <label>Brand (Marca)</label>
                 <input type="text" name="brand">
 
-                <label>Model</label>
+                <label>Model (Modelo)</label>
                 <input type="text" name="model">
 
-                <label>ID</label>
-                <input type="text" name="id">
-
-                <label>Description</label>
-                <input type="text" name="description">
-
-                <label>Number of Tires</label>
-                <input type="text" name="num_tires">
-
-                <label>Fee</label>
-                <input type="text" name="fee">
+                <label>Tipo de Vehículo (ID numérico)</label>
+                <input type="number" name="typeId" value="1" required>
 
                 <div class="buttons">
                     <input type="submit" value="Guardar vehiculo" class="save">
@@ -56,7 +46,7 @@
                 </div>
             </form>
         </div>
-        
+
         <a href="main_menu.html" id="boton-volver">Volver al inicio<a/>
 
     </body>
