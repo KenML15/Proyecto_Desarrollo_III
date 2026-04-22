@@ -22,24 +22,20 @@
         </div>
 
         <div class="container">
+    <h2>Datos a ingresar</h2>
+    <form action="parkingLot" method="post">
+        <label>Nombre del Parqueo</label>
+        <input type="text" name="name" required placeholder="Ej: Parqueo Central">
 
-            <h2>Datos a ingresar</h2>
+        <label>Cantidad de Espacios</label>
+        <input type="number" name="num_spaces" required placeholder="Ej: 50">
 
-            <form action="parkingLot"  method="post">
-
-                <label>Id</label>
-                <input type="text" name="id">
-                            
-                <label>Name</label>
-                <input type="text" name="name">
-
-                <label>Number Of Spaces</label>
-                <input type="text" name="num_spaces">
-
-                <div class="buttons">
-                    <input type="submit" value="Guardar parqueo" class="save">
-                    <input type="reset" value="Cancelar" class="cancel">
-                </div>
+        <div class="buttons">
+            <input type="submit" value="Guardar parqueo" class="save">
+            <input type="reset" value="Limpiar" class="cancel">
+        </div>
+    </form>
+</div>
 
             </form>
         </div>

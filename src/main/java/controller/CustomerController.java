@@ -19,47 +19,41 @@ import model.entity.Customer;
  *
  * @author Jefferson
  */
-
 /**
- *Gestión de Clientes
+ * Gestión de Clientes
  */
-
 @WebServlet("/customers")
-public class CustomerController extends HttpServlet{
-    
+public class CustomerController extends HttpServlet {
+
     private CustomerDAO customerDAO;
 
     public CustomerController() {
         customerDAO = new CustomerDAO();
     }
-    
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        //seteamos carácteres especiales (ñ, á, é...)
-        request.setCharacterEncoding("UTF-8");
 
+        request.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
-        
-        //capturar formulario
-        int id = Integer.parseInt(request.getParameter("id"));
         String name = request.getParameter("name");
-        
-        //verificar discapacidad
         boolean disability = request.getParameter("discapacity") != null;
 
-        Customer customer = new Customer(id, name, disability);
         if ("update".equalsIgnoreCase(action)) {
-            customerDAO.update(customer); // Ahora sí ejecuta la actualización
+            // Para actualizar sí ocupamos el ID que viene oculto
+            int id = Integer.parseInt(request.getParameter("id"));
+            Customer customer = new Customer(id, name, disability);
+            customerDAO.update(customer);
         } else {
+            // Para insertar, mandamos un ID temporal (como 0) ya que la BD lo ignora
+            Customer customer = new Customer(0, name, disability);
             customerDAO.insert(customer);
         }
 
-        //lista de clientes
-        response.sendRedirect("customers"); 
+        response.sendRedirect("customers");
     }
-    
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -69,19 +63,19 @@ public class CustomerController extends HttpServlet{
         //eliminar cliente
         if ("delete".equalsIgnoreCase(action)) {
             int customerId = Integer.parseInt(request.getParameter("id"));
-            customerDAO.delete(customerId); 
+            customerDAO.delete(customerId);
             response.sendRedirect("customers");
-            
-        //editar cliente (
+
+            //editar cliente (
         } else if ("edit".equalsIgnoreCase(action)) {
             int customerId = Integer.parseInt(request.getParameter("id"));
-            Customer customer = customerDAO.findById(customerId); 
+            Customer customer = customerDAO.findById(customerId);
             request.setAttribute("customer", customer);
             request.getRequestDispatcher("edit_customer.jsp").forward(request, response);
-            
-        //listar todos los clientes
+
+            //listar todos los clientes
         } else {
-            List<Customer> customers = customerDAO.findAll(); 
+            List<Customer> customers = customerDAO.findAll();
             request.setAttribute("customers", customers);
             RequestDispatcher dispatcher = request.getRequestDispatcher("show_all_customers.jsp");
             dispatcher.forward(request, response);

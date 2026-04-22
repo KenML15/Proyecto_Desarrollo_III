@@ -25,7 +25,7 @@
                     <th>Marca</th>
                     <th>Modelo</th>
                     <th>Color</th>
-                    <th>Acciones</th>
+                    <th>Dueño</th> <th>Acciones</th>
                 </tr>
                 <c:forEach var="v" items="${vehicles}">
                     <tr>
@@ -33,6 +33,17 @@
                         <td><c:out value="${v.brand}"/></td>
                         <td><c:out value="${v.model}"/></td>
                         <td><c:out value="${v.color}"/></td>
+                        <td>
+                            <%-- Mostramos el nombre del dueño o un mensaje si es nulo --%>
+                            <c:choose>
+                                <c:when test="${not empty v.ownerName}">
+                                    <c:out value="${v.ownerName}"/>
+                                </c:when>
+                                <c:otherwise>
+                                    <span style="color: gray; font-style: italic;">Sin asignar</span>
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
                         <td>
                             <a href="vehicles?action=edit&plate=${v.plate}" class="save" style="padding: 5px 10px; text-decoration: none; font-size: 0.8rem;">Editar</a>
                             <a href="vehicles?action=delete&plate=${v.plate}" class="cancel" style="padding: 5px 10px; text-decoration: none; font-size: 0.8rem;" onclick="return confirm('¿Seguro que desea eliminar el vehículo ${v.plate}?')">Eliminar</a>

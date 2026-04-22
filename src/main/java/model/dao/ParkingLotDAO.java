@@ -20,19 +20,20 @@ import model.entity.Vehicle;
 public class ParkingLotDAO {
 
     public boolean insert(ParkingLot p) {
-        String sql = "INSERT INTO parking_lot (id, name, number_of_spaces) VALUES (?, ?, ?)";
-        try (Connection conn = DbConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+    // Quitamos 'id' de la consulta
+    String sql = "INSERT INTO parking_lot (name, number_of_spaces) VALUES (?, ?)";
+    try (Connection conn = DbConnection.getConnection(); 
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setInt(1, p.getId());
-            pstmt.setString(2, p.getName());
-            pstmt.setInt(3, p.getNumberOfSpaces());
+        pstmt.setString(1, p.getName());
+        pstmt.setInt(2, p.getNumberOfSpaces());
 
-            return pstmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            System.out.println("Error SQL en ParkingLotDAO: " + e.getMessage());
-            return false;
-        }
+        return pstmt.executeUpdate() > 0;
+    } catch (SQLException e) {
+        System.out.println("Error SQL en ParkingLotDAO: " + e.getMessage());
+        return false;
     }
+}
 
     public List<ParkingLot> findAll() {
         List<ParkingLot> list = new ArrayList<>();

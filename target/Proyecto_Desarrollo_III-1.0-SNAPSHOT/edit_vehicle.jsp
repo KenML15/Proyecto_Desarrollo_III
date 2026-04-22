@@ -1,58 +1,42 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Editar Vehículo</title>
-        <link rel="stylesheet" href="CSS/style.css"/>
+        <link rel="stylesheet" href="CSS/style.css">
     </head>
     <body>
-        
         <div id="titulo">
             <h2>Modificar Datos del Vehículo</h2>
         </div>
-
         <div class="container">
-            
-            <h2>Formulario de edición</h2>
+            <form action="vehicles" method="post">
+                <input type="hidden" name="action" value="update">
 
-            <form action="vehicles?action=update" method="post">
-
-                <label>Plate (Placa)</label>
-                <input type="text" name="plate" value="${vehicle.plate}" readonly style="background-color: #eee;">
+                <label>Placa (No editable)</label>
+                <input type="text" name="plate" value="${vehicle.plate}" readonly>
 
                 <label>Color</label>
-                <input type="text" name="color" value="${vehicle.color}" required>
+                <input type="text" name="color" value="${vehicle.color}">
 
-                <label>Brand (Marca)</label>
-                <input type="text" name="brand" value="${vehicle.brand}" required>
+                <label>Marca</label>
+                <input type="text" name="brand" value="${vehicle.brand}">
 
-                <label>Model (Modelo)</label>
-                <input type="text" name="model" value="${vehicle.model}" required>
+                <label>Modelo</label>
+                <input type="text" name="model" value="${vehicle.model}">
 
-                <label>Owner ID (ID Propietario)</label>
-                <input type="text" name="id" value="${vehicle.id}" required>
-
-                <label>Description</label>
-                <input type="text" name="description" value="${vehicle.description}">
-
-                <label>Number of Tires</label>
-                <input type="number" name="num_tires" value="${vehicle.numTires}" required>
-
-                <label>Fee (Tarifa)</label>
-                <input type="number" step="0.01" name="fee" value="${vehicle.fee}" required>
+                <label>Tipo de Vehículo</label>
+                <select name="typeId">
+                    <option value="1" ${vehicle.idVehicleType == 1 ? 'selected' : ''}>Automóvil</option>
+                    <option value="2" ${vehicle.idVehicleType == 2 ? 'selected' : ''}>Motocicleta</option>
+                    <option value="3" ${vehicle.idVehicleType == 3 ? 'selected' : ''}>Camión</option>
+                </select>
 
                 <div class="buttons">
-                    <input type="submit" value="Actualizar Vehículo" class="save">
-                    <a href="vehicles" class="cancel" style="text-decoration: none; display: inline-block; text-align: center; line-height: normal;">Cancelar</a>
+                    <input type="submit" value="Actualizar" class="save">
+                    <a href="vehicles" class="cancel" style="text-decoration:none; padding:10px;">Cancelar</a>
                 </div>
             </form>
         </div>
-        
-        <div style="text-align: center; margin-top: 20px;">
-            <a href="main_menu.html" id="boton-volver">Volver al inicio</a>
-        </div>
-
     </body>
 </html>

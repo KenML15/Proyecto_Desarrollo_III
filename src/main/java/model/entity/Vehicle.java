@@ -14,18 +14,30 @@ public class Vehicle {
     private String color;
     private String brand;
     private String model;
-    private VehicleType type;
+    private int idVehicleType;
+    private int idCustomer;
+    private String ownerName; // Agrega esto
 
-     //constructor completo
-//    public Vehicle(String plate, String color, String brand, String model, VehicleType type) {
-//        this.plate = plate;
-//        this.color = color;
-//        this.brand = brand;
-//        this.model = model;
-//        this.type = type;
-//    }
-    
-    //CONSTRUCTOR TEMPORAL
+// Agrega el getter y setter
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public int getIdCustomer() {
+        return idCustomer;
+    }
+
+    public void setIdCustomer(int idCustomer) {
+        this.idCustomer = idCustomer;
+    }// <--- Asegúrate de que este nombre sea EXACTO
+
+    public Vehicle() {
+    }
+
     public Vehicle(String plate, String color, String brand, String model) {
         this.plate = plate;
         this.color = color;
@@ -33,10 +45,14 @@ public class Vehicle {
         this.model = model;
     }
 
-    public Vehicle() {
-    }
-
-    // Getters y Setters
+//
+//    public Vehicle(String plate, String color, String brand, String model, int idVehicleType) {
+//        this.plate = plate;
+//        this.color = color;
+//        this.brand = brand;
+//        this.model = model;
+//        this.idVehicleType = idVehicleType;
+//    }
     public String getPlate() {
         return plate;
     }
@@ -69,11 +85,12 @@ public class Vehicle {
         this.model = model;
     }
 
-    public VehicleType getType() {
-        return type;
+    public int getIdVehicleType() {
+        return idVehicleType;
     }
 
-    public void setType(VehicleType type) {
-        this.type = type;
+    public void setIdVehicleType(int idVehicleType) {
+        this.idVehicleType = idVehicleType;
     }
+
 }

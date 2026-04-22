@@ -47,25 +47,26 @@ public class ParkingLotController extends HttpServlet {
         }
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+   @Override
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
 
-        request.setCharacterEncoding("UTF-8");
-        String action = request.getParameter("action");
+    request.setCharacterEncoding("UTF-8");
+    String action = request.getParameter("action");
+    String name = request.getParameter("name");
+    int numSpaces = Integer.parseInt(request.getParameter("num_spaces"));
 
+    if ("update".equalsIgnoreCase(action)) {
+        // En actualización sí ocupamos el ID que viene oculto
         int id = Integer.parseInt(request.getParameter("id"));
-        String name = request.getParameter("name");
-        int numSpaces = Integer.parseInt(request.getParameter("num_spaces"));
-
         ParkingLot p = new ParkingLot(id, name, numSpaces);
-
-        if ("update".equalsIgnoreCase(action)) {
-            parkingDAO.update(p);
-        } else {
-            parkingDAO.insert(p);
-        }
-
-        response.sendRedirect("parkingLot");
+        parkingDAO.update(p);
+    } else {
+        // En inserción mandamos 0, la base de datos pondrá el ID real
+        ParkingLot p = new ParkingLot(0, name, numSpaces);
+        parkingDAO.insert(p);
     }
+
+    response.sendRedirect("parkingLot");
+}
 }
