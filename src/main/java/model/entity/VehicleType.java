@@ -10,27 +10,24 @@ package model.entity;
  */
 public class VehicleType {
 
-    private int id;
+    private int idVehicleType;
     private String description;
-    private int numberOfTires;
-    private float fee;
 
-    public VehicleType(int id, String description, int numberOfTires, float fee) {
-        this.id = id;
-        this.description = description;
-        this.numberOfTires = numberOfTires;
-        this.fee = fee;
-    }
-    
     public VehicleType() {
     }
 
-    public int getId() {
-        return id;
+    public VehicleType(int idVehicleType, String description) {
+        this.idVehicleType = idVehicleType;
+        this.description = description;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    // Getters y Setters
+    public int getIdVehicleType() {
+        return idVehicleType;
+    }
+
+    public void setIdVehicleType(int idVehicleType) {
+        this.idVehicleType = idVehicleType;
     }
 
     public String getDescription() {
@@ -40,23 +37,4 @@ public class VehicleType {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    public int getNumberOfTires() {
-        return numberOfTires;
-    }
-
-    public void setNumberOfTires(int numberOfTires) {
-        this.numberOfTires = numberOfTires;
-    }
-
-    public float getFee() {
-        return fee;
-    }
-
-    public void setFee(float fee) {
-        this.fee = fee;
-    }
-    
-    
-
 }

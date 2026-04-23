@@ -9,43 +9,47 @@ package model.dao;
  * @author Kenneth
  */
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import model.entity.Ticket;
 
 public class TicketDAO {
 
     // 1. Registrar entrada (Crear Ticket)
-    public boolean openTicket(int customerId, String plate, int spaceId) {
-        String sql = "INSERT INTO ticket (entry_date, customer_id, vehicle_plate, space_id) VALUES (NOW(), ?, ?, ?)";
-        
-        try (Connection conn = DbConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            
-            pstmt.setInt(1, customerId);
-            pstmt.setString(2, plate);
-            pstmt.setInt(3, spaceId);
-            
-            return pstmt.executeUpdate() > 0;
-            
-        } catch (SQLException e) {
-            System.out.println("Error al abrir ticket: " + e.getMessage());
-            return false;
+    public int openTicket(int idCustomer, String plate) {
+    String sql = "INSERT INTO ticket (entry_date, id_customer, vehicle_plate) VALUES (NOW(), ?, ?)";
+
+    try (Connection conn = DbConnection.getConnection(); 
+         PreparedStatement pstmt = conn.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS)) {
+
+        pstmt.setInt(1, idCustomer);
+        pstmt.setString(2, plate);
+
+        int affectedRows = pstmt.executeUpdate();
+
+        if (affectedRows > 0) {
+            // se recupera el id del autoincrement
+            try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1); //retorna
+                }
+            }
         }
+        return -1; // Si no generó ID
+    } catch (SQLException e) {
+        System.out.println("Error al abrir ticket: " + e.getMessage());
+        return -1;
     }
+}
 
     // 2. Registrar salida y calcular monto (Cerrar Ticket)
     public boolean closeTicket(int ticketId, float finalAmount) {
         String sql = "UPDATE ticket SET exit_date = NOW(), total_amount = ? WHERE id = ?";
-        
-        try (Connection conn = DbConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            
+
+        try (Connection conn = DbConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
             pstmt.setFloat(1, finalAmount);
             pstmt.setInt(2, ticketId);
-            
+
             return pstmt.executeUpdate() > 0;
-            
+
         } catch (SQLException e) {
             System.out.println("Error al cerrar ticket: " + e.getMessage());
             return false;
@@ -55,13 +59,14 @@ public class TicketDAO {
     // 3. Buscar ticket activo por placa (Para el proceso de salida)
     public int findActiveTicketByPlate(String plate) {
         String sql = "SELECT id FROM ticket WHERE vehicle_plate = ? AND exit_date IS NULL";
-        try (Connection conn = DbConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            
+        try (Connection conn = DbConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
             pstmt.setString(1, plate);
             ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) return rs.getInt("id");
-            
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
