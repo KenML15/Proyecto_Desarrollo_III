@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 public class DbConnection {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/parking"; //Acá Cambian la conexión
+    private static final String URL = "jdbc:mysql://localhost:3306/parkingp"; //Acá Cambian la conexión
     private static final String USER = "root";
     private static final String PASSWORD = ""; // Por defecto en XAMPP está vacío
 

@@ -1,274 +1,314 @@
 /* =========================================
-   1. VARIABLES Y RESET
+   ESTILO MODERNO PARA SISTEMA DE PARQUEO
    ========================================= */
+
 :root {
-    --primary: #2563eb;       /* Azul moderno */
-    --primary-hover: #1d4ed8;
-    --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-    --glass-bg: rgba(255, 255, 255, 0.05);
-    --glass-border: rgba(255, 255, 255, 0.1);
+    --bg-dark: #0f172a;
+    --bg-card: rgba(30, 41, 59, 0.7);
+    --accent: #4ecca3; /* Verde menta vibrante */
+    --accent-hover: #45b391;
     --text-main: #f8fafc;
     --text-muted: #94a3b8;
-    --success: #22c55e;
-    --danger: #ef4444;
+    --danger: #ff4d4d;
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background: var(--bg-gradient);
-    background-attachment: fixed;
+    background: radial-gradient(circle at top right, #1e293b, #0f172a);
     color: var(--text-main);
-    margin: 0;
+    font-family: 'Inter', -apple-system, sans-serif;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 40px 20px;
 }
 
-#session-bar {
-    text-align: right;
-    padding: 10px 20px;
-}
-#btn-login {
-    background-color: red;
-    text-align: right;
-    color: white;
-    padding: 8px 15px;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-}
-#btn-logout {
-    background-color: #f44336;
-    color: white;
-    padding: 8px 15px;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-
+/* --- CABECERA CON LOGO A LA DERECHA --- */
+.header-container {
+    display: flex;
+    flex-direction: row-reverse; /* Esto mueve el logo al final (derecha) */
+    align-items: center;
+    justify-content: space-between; /* Separa el título a la izquierda y el logo a la derecha */
+    width: 100%;
+    max-width: 900px;
+    margin-bottom: 40px;
+    padding: 0 20px;
 }
 
-/* =========================================
-   2. ENCABEZADOS
-   ========================================= */
+.logo {
+    width: 70px;
+    height: auto;
+    object-fit: contain;
+    /* Un brillo sutil para que resalte en la esquina */
+    filter: drop-shadow(0 0 8px rgba(78, 204, 163, 0.2));
+}
+
 #titulo h2 {
-    font-size: 2.5rem;
-    font-weight: 800;
-    letter-spacing: -1px;
-    margin: 40px 0;
-    background: linear-gradient(to right, #60a5fa, #2563eb);
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 0;
+    background: linear-gradient(to right, #ffffff, var(--accent));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    text-align: left; /* El texto se queda en la izquierda */
+    color: var(--accent);
 }
 
-/* =========================================
-   3. CONTENEDORES (Glassmorphism)
-   ========================================= */
+/* Títulos con Gradiente */
+#titulo h2 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 35px;
+    background: linear-gradient(to right, #ffffff, var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+}
+
+/* Contenedor con Efecto Esmerilado */
 .container {
-    width: 90%;
-    max-width: 450px;
-    background: var(--glass-bg);
+    background: var(--bg-card);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--glass-border);
-    border-radius: 20px;
+    border-radius: 24px;
     padding: 40px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    margin-bottom: 30px;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
 .container h2 {
-    font-size: 1.5rem;
-    color: var(--text-main);
-    margin-bottom: 30px;
-    border-left: 4px solid var(--primary);
-    padding-left: 15px;
-    text-align: left;
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    margin-bottom: 25px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-/* =========================================
-   4. FORMULARIOS
-   ========================================= */
-label {
+/* Formularios y Selects */
+form label {
     display: block;
+    margin-bottom: 8px;
     font-size: 0.85rem;
     font-weight: 600;
-    color: var(--text-muted);
-    margin-bottom: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    color: var(--accent);
 }
 
-input[type=text],
-input[type=number],
-input[type=password],
+input[type="text"],
+input[type="number"],
+input[type="password"],
 select {
     width: 100%;
-    padding: 12px 16px;
-    margin-bottom: 20px;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(15, 23, 42, 0.5);
     border: 1px solid var(--glass-border);
-    border-radius: 8px;
+    border-radius: 12px;
+    padding: 14px 18px;
     color: white;
     font-size: 1rem;
+    margin-bottom: 22px;
     transition: all 0.3s ease;
 }
 
-input:focus {
+input:focus, select:focus {
     outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
-    background: rgba(0, 0, 0, 0.4);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(78, 204, 163, 0.15);
+    background: rgba(15, 23, 42, 0.8);
 }
 
-/* =========================================
-   5. BOTONES ACCIÓN
-   ========================================= */
+/* Campos de solo lectura */
+input[readonly] {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Botones Estilo Píldora */
 .buttons {
     display: flex;
     gap: 15px;
-    margin-top: 10px;
+    margin-top: 15px;
 }
 
-input[type=submit],
-.save {
-    flex: 2;
-    background: var(--primary);
-    color: white;
-    padding: 14px;
+.save, button[type="submit"], input[type="submit"] {
+    background: var(--accent);
+    color: #0f172a;
     border: none;
-    border-radius: 8px;
+    border-radius: 50px;
+    padding: 14px 28px;
     font-weight: 700;
     cursor: pointer;
-    transition: transform 0.2s, background 0.3s;
+    transition: all 0.3s ease;
+    flex: 1;
+    text-align: center;
+    text-decoration: none;
+    font-size: 0.95rem;
 }
 
-input[type=reset],
-.cancel {
-    flex: 1;
+.save:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(78, 204, 163, 0.3);
+}
+
+.cancel, button[type="reset"], .btn-login, .cancel-link {
     background: rgba(255, 255, 255, 0.05);
     color: var(--text-main);
     border: 1px solid var(--glass-border);
-    padding: 14px;
-    border-radius: 8px;
+    border-radius: 50px;
+    padding: 14px 28px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1;
+    text-align: center;
+    text-decoration: none;
+    font-size: 0.95rem;
+    display: inline-block;
+}
+
+.cancel:hover, .cancel-link:hover {
+    background: rgba(255, 77, 77, 0.15);
+    border-color: var(--danger);
+    color: var(--danger);
+}
+
+/* Tablas Modernas */
+#table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    margin-top: 20px;
+}
+
+#table tr#encabezado th {
+    padding: 12px 15px;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    text-align: left;
+}
+
+#table tr:not(#encabezado) {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+}
+
+#table td {
+    padding: 16px 15px;
+    border: none;
+    color: var(--text-main);
+}
+
+#table td:first-child {
+    border-radius: 12px 0 0 12px;
+}
+#table td:last-child {
+    border-radius: 0 12px 12px 0;
+}
+
+/* Enlaces Volver */
+#boton-volver, .contenedor-centrado a {
+    display: block;
+    text-align: center;
+    margin-top: 30px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+}
+
+#boton-volver:hover {
+    color: var(--accent);
+}
+
+/* Checkbox Personalizado */
+input[type="checkbox"] {
+    accent-color: var(--accent);
+    transform: scale(1.2);
     cursor: pointer;
 }
 
-input[type=submit]:hover {
-    background: var(--primary-hover);
-    transform: translateY(-2px);
+/* Estilos específicos para el Menú Principal */
+.menu-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
+    max-width: 900px;
 }
 
-/* =========================================
-   6. TABLAS Y NAVEGACIÓN
-   ========================================= */
-table {
-    width: 90%;
-    max-width: 1000px;
-    background: var(--glass-bg);
-    backdrop-filter: blur(10px);
-    border-radius: 15px;
-    overflow: hidden;
-    border-collapse: collapse;
-    margin: 20px auto;
-}
-
-th {
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--text-main);
-    padding: 18px;
+.menu-section h3 {
+    color: var(--accent);
     font-size: 0.9rem;
     text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+    margin-left: 10px;
 }
 
-td {
-    padding: 15px;
-    border-bottom: 1px solid var(--glass-border);
-    color: var(--text-muted);
-}
-
-tr:hover td {
-    background: rgba(255, 255, 255, 0.02);
-    color: white;
-}
-
-a {
-    color: var(--text-main);
-    text-decoration: none;
-    font-weight: 600;
-}
-
-/* Botón Volver específico */
-#boton_volver, #boton-volver {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 10px 25px;
-    background: transparent;
-    border: 1px solid var(--primary);
-    color: var(--primary);
-    border-radius: 50px;
-    transition: all 0.3s;
-}
-
-#boton_volver:hover {
-    background: var(--primary);
-    color: white;
-}
-
-/* =========================================
-   ESTILOS PARA EL DASHBOARD (TARJETAS)
-   ========================================= */
-.dashboard-grid {
+.grid-menu {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 25px;
-    width: 90%;
-    max-width: 1100px;
-    margin: 40px auto;
+    gap: 20px;
 }
 
-.card {
-    background: var(--glass-bg);
-    backdrop-filter: blur(10px);
+.menu-card {
+    background: var(--bg-card);
     border: 1px solid var(--glass-border);
     border-radius: 20px;
     padding: 30px;
+    text-align: center;
     text-decoration: none;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    gap: 15px;
 }
 
-.card:hover {
+.menu-card:hover {
     transform: translateY(-10px);
     background: rgba(255, 255, 255, 0.1);
-    border-color: var(--primary);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    border-color: var(--accent);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
 }
 
-.card-icon {
+.menu-card .icon {
     font-size: 2.5rem;
-    margin-bottom: 20px;
 }
 
-.card h3 {
+.menu-card .label {
     color: var(--text-main);
-    margin: 0 0 10px 0;
-    font-size: 1.4rem;
+    font-weight: 600;
+    font-size: 1.1rem;
 }
 
-.card p {
+/* Botón de cerrar sesión */
+.logout-container {
+    margin-top: 50px;
+}
+
+.btn-logout {
     color: var(--text-muted);
+    text-decoration: none;
     font-size: 0.9rem;
-    line-height: 1.5;
-    margin-bottom: 20px;
+    padding: 10px 25px;
+    border-radius: 50px;
+    border: 1px solid var(--glass-border);
+    transition: all 0.3s;
 }
 
-.card-action {
-    color: var(--primary);
-    font-weight: bold;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+.btn-logout:hover {
+    color: var(--danger);
+    border-color: var(--danger);
+    background: rgba(255, 77, 77, 0.1);
 }

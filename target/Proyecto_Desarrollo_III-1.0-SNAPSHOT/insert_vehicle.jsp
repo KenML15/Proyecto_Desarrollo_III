@@ -62,6 +62,10 @@
             </form>
         </div>
 
-        <a href="main_menu.html" id="boton-volver">Volver al inicio</a>
+        <div class="contenedor-centrado" style="text-align: center; margin-top: 20px;">
+            <button type="button" onclick="location.href = 'main_menu.html'" class="cancel" style="padding: 10px 20px;">
+                Volver al inicio
+            </button>
+        </div>
     </body>
 </html>

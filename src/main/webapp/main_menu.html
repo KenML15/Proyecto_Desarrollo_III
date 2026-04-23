@@ -1,35 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
     <head>
-        <title>Menu Principal</title>
+        <title>Menú Principal</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" href="CSS/style.css"/>
-
     </head>
-
     <body>
 
-        <div id="titulo">
-            <h2>Menú de Navegación</h2>
+        <div class="header-container">
+            <img src="IMG/logo.png" alt="Logo" class="logo">
+            <div id="titulo">
+                <h2>Panel de Control</h2>
+            </div>
         </div>
 
-        <div class="Navegacion">
-            <table>
-                <tr>
-                    <th><a href="insert_customer.jsp">Insertar cliente</a></th>
-                    <th><a href="vehicles?action=add">Insertar Vehículo</a></th>
-                    <th><a href="insert_parkinglot.jsp">Crear parqueo</a></th>
-                </tr>
-                <tr>
-                    <th><a href="customers">Gestionar Clientes</a></th>
-                    <th><a href="vehicles?action=list">Gestionar Vehículos</a></th>
-                    <th><a href="parkingLot">Gestionar Parqueos</a></th>
-                </tr>
-            </table>
-        </div>
-                <div id= btn-login> 
-            <a href="login.jsp" class="btn-login">Cerrar Sesión</a>
+        <div class="menu-container">
+            <div class="menu-section">
+                <h3>Registros</h3>
+                <div class="grid-menu">
+                    <a href="insert_customer.jsp" class="menu-card">
+                        <span class="label">Insertar Cliente</span>
+                    </a>
+                    <a href="vehicles?action=add" class="menu-card">
+                        <span class="label">Insertar Vehículo</span>
+                    </a>
+                    <a href="insert_parkinglot.jsp" class="menu-card">
+                        <span class="label">Crear Parqueo</span>
+                    </a>
+                </div>
             </div>
+
+            <div class="menu-section">
+                <h3>Administración</h3>
+                <div class="grid-menu">
+                    <a href="customers" class="menu-card">
+                        <span class="label">Gestionar Clientes</span>
+                    </a>
+                    <a href="vehicles?action=list" class="menu-card">
+                        <span class="label">Gestionar Vehículos</span>
+                    </a>
+                    <a href="parkingLot" class="menu-card">
+                        <span class="label">Gestionar Parqueos</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="logout-container"> 
+            <a href="login.jsp" class="btn-logout">Cerrar Sesión</a>
+        </div>
 
     </body>
 </html>
