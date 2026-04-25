@@ -13,6 +13,16 @@ public class ParkingLot {
     private int id;
     private String name;
     private int numberOfSpaces;
+    private int occupiedSpaces; // Nuevo atributo
+
+// Getter y Setter
+    public int getOccupatedSpaces() {
+        return occupiedSpaces;
+    }
+
+    public void setOccupatedSpaces(int occupiedSpaces) {
+        this.occupiedSpaces = occupiedSpaces;
+    }
 
     public ParkingLot(int id, String name, int numberOfSpaces) {
         this.id = id;

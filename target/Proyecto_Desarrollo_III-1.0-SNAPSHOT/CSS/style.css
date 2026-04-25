@@ -312,3 +312,13 @@ input[type="checkbox"] {
     border-color: var(--danger);
     background: rgba(255, 77, 77, 0.1);
 }
+
+.menu-card.operation {
+    border-left: 5px solid #2ecc71; /* Un borde verde para indicar que es 'acción' */
+    background-color: #1e272e;
+}
+
+.menu-card.operation:hover {
+    background-color: #2ecc71;
+    color: white;
+}

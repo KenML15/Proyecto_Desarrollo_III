@@ -20,20 +20,19 @@ import model.entity.Vehicle;
 public class ParkingLotDAO {
 
     public boolean insert(ParkingLot p) {
-    // Quitamos 'id' de la consulta
-    String sql = "INSERT INTO parking_lot (name, number_of_spaces) VALUES (?, ?)";
-    try (Connection conn = DbConnection.getConnection(); 
-         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        // Quitamos 'id' de la consulta
+        String sql = "INSERT INTO parking_lot (name, number_of_spaces) VALUES (?, ?)";
+        try (Connection conn = DbConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-        pstmt.setString(1, p.getName());
-        pstmt.setInt(2, p.getNumberOfSpaces());
+            pstmt.setString(1, p.getName());
+            pstmt.setInt(2, p.getNumberOfSpaces());
 
-        return pstmt.executeUpdate() > 0;
-    } catch (SQLException e) {
-        System.out.println("Error SQL en ParkingLotDAO: " + e.getMessage());
-        return false;
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println("Error SQL en ParkingLotDAO: " + e.getMessage());
+            return false;
+        }
     }
-}
 
     public List<ParkingLot> findAll() {
         List<ParkingLot> list = new ArrayList<>();
@@ -60,12 +59,34 @@ public class ParkingLotDAO {
     }
 
     public boolean delete(int id) {
-        String sql = "DELETE FROM parking_lot WHERE id = ?";
-        try (Connection conn = DbConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, id);
-            return pstmt.executeUpdate() > 0;
+        // 1. Primero borramos todas las asignaciones vinculadas a este parqueo
+        String sqlAsignaciones = "DELETE FROM vehicle_assignment WHERE id_parking_lot = ?";
+        // 2. Luego borramos el parqueo
+        String sqlParqueo = "DELETE FROM parking_lot WHERE id = ?";
+
+        try (Connection conn = DbConnection.getConnection()) {
+            conn.setAutoCommit(false); // Iniciamos una transacción
+
+            try (PreparedStatement pstmt1 = conn.prepareStatement(sqlAsignaciones); PreparedStatement pstmt2 = conn.prepareStatement(sqlParqueo)) {
+
+                // Borrar hijos
+                pstmt1.setInt(1, id);
+                pstmt1.executeUpdate();
+
+                // Borrar padre
+                pstmt2.setInt(1, id);
+                int rows = pstmt2.executeUpdate();
+
+                conn.commit(); // Si todo sale bien, guardamos cambios
+                return rows > 0;
+
+            } catch (SQLException e) {
+                conn.rollback(); // Si algo falla, deshacemos todo
+                System.err.println("Error en transacción de borrado: " + e.getMessage());
+                return false;
+            }
         } catch (SQLException e) {
-            System.err.println("Error al eliminar parqueo: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }

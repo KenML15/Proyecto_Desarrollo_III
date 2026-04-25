@@ -1,8 +1,11 @@
 controller\ParkingLotController.class
+controller\AssignmentController.class
 model\entity\Vehicle.class
 model\dao\SpaceDAO.class
 model\dao\VehicleTypeDAO.class
 model\entity\ParkingLot.class
+model\entity\VehicleAssignment.class
+model\dao\AssignmentDAO.class
 controller\LoginController.class
 controller\VehicleController.class
 model\dao\RateDAO.class
