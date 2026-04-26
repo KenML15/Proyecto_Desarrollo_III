@@ -213,6 +213,7 @@ input[readonly] {
 }
 #table td:last-child {
     border-radius: 0 12px 12px 0;
+    white-space: nowrap
 }
 
 /* Enlaces Volver */
@@ -321,4 +322,154 @@ input[type="checkbox"] {
 .menu-card.operation:hover {
     background-color: #2ecc71;
     color: white;
+}
+
+/* =========================================
+   CLASES DE UTILIDAD — ESTILOS MIGRADOS
+   ========================================= */
+
+/* Contenedor ancho para tablas (parqueos, dashboard) */
+.container--wide {
+    max-width: 900px;
+}
+
+/* Contenedor mediano para tablas (clientes, vehículos) */
+.container--medium {
+    max-width: 800px;
+}
+
+/* Botones de acción dentro de las filas de tabla */
+.btn-table {
+    padding: 5px 10px;
+    text-decoration: none;
+    font-size: 0.8rem;
+    flex: unset;
+    display: inline-block;
+}
+
+/* Botón "Ver Ocupación" — variante azul informativa */
+.btn-table--info {
+    background-color: #2980b9;
+}
+
+/* Div contenedor del enlace "Volver al menú" bajo las tablas */
+.footer-nav {
+    margin-top: 20px;
+}
+
+/* Variante con más espacio superior (dashboard) */
+.footer-nav--lg {
+    margin-top: 30px;
+}
+
+/* Fila del checkbox en formularios de inserción */
+.checkbox-row {
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* El input checkbox dentro de .checkbox-row no ocupa el ancho total */
+.checkbox-row input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+/* Label del checkbox sin peso extra */
+.checkbox-label {
+    margin: 0;
+    font-weight: normal;
+}
+
+/* Div del checkbox en formularios de edición */
+.form-check {
+    margin: 15px 0;
+}
+
+/* Contenedor centrado del botón "Volver al inicio" */
+.contenedor-centrado {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Celda de tabla con texto centrado */
+.td-center {
+    text-align: center;
+}
+
+/* Celda de tabla con padding para el visual de la barra */
+.td-visual {
+    padding: 15px;
+}
+
+/* Encabezado de columna con ancho fijo para estado visual */
+.th-visual {
+    width: 250px;
+}
+
+/* Contenedor de la barra de progreso */
+.progress-bar {
+    width: 100%;
+    background: #34495e;
+    border-radius: 5px;
+    height: 12px;
+    overflow: hidden;
+}
+
+/* Relleno interior de la barra (el width% viene dinámico desde JSTL) */
+.progress-bar__fill {
+    height: 100%;
+    transition: width 0.5s;
+}
+
+/* Relleno verde cuando hay espacio disponible */
+.progress-bar__fill--ok {
+    background: #2ecc71;
+}
+
+/* Relleno rojo cuando el parqueo está lleno */
+.progress-bar__fill--full {
+    background: #e74c3c;
+}
+
+/* Etiqueta de porcentaje bajo la barra */
+.progress-label {
+    display: block;
+    margin-top: 5px;
+    color: #bdc3c7;
+}
+
+/* Texto "Sin asignar" en tabla de vehículos */
+.text-unassigned {
+    color: gray;
+    font-style: italic;
+}
+
+/* Div de redirección fallback en index.jsp */
+.redirect-fallback {
+    text-align: center;
+    margin-top: 50px;
+    font-family: Arial, sans-serif;
+}
+
+/* Mensaje de error en login.jsp */
+.error-msg {
+    color: red;
+}
+
+/* Badge de estado PARQUEADO en show_occupancy */
+.badge-parked {
+    background-color: #27ae60;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+/* Banner de debug en insert_vehicle.jsp */
+.debug-banner {
+    background: yellow;
+    padding: 10px;
+    color: black;
 }

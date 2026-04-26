@@ -26,12 +26,12 @@
 
                 <div class="buttons">
                     <input type="submit" value="Actualizar" class="save">
-                    <a href="parkingLot" class="cancel" style="text-decoration:none; padding:10px;">Cancelar</a>
+                    <a href="parkingLot" class="cancel">Cancelar</a>
                 </div>
             </form>
         </div>
 
-        <div style="text-align: center; margin-top: 20px;">
+        <div class="footer-nav">
             <a href="main_menu.html" id="boton-volver">Volver al inicio</a>
         </div>
 

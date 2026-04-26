@@ -38,8 +38,22 @@ public class AssignmentController extends HttpServlet {
         }
 
         if ("list".equalsIgnoreCase(action)) {
-            // Asegúrate de que llame a findActiveAssignments()
-            List<VehicleAssignment> activeList = assignmentDAO.findActiveAssignments();
+            String lotIdStr = request.getParameter("lotId");
+            List<VehicleAssignment> activeList;
+
+            if (lotIdStr != null && !lotIdStr.isEmpty()) {
+                try {
+                    int lotId = Integer.parseInt(lotIdStr);
+                    activeList = assignmentDAO.findActiveAssignmentsByLot(lotId);
+                    // Pasamos el lotId a la vista para personalizar el título
+                    request.setAttribute("lotId", lotId);
+                } catch (NumberFormatException e) {
+                    activeList = assignmentDAO.findActiveAssignments();
+                }
+            } else {
+                activeList = assignmentDAO.findActiveAssignments();
+            }
+
             request.setAttribute("activeAssignments", activeList);
             request.getRequestDispatcher("show_occupancy.jsp").forward(request, response);
             return;

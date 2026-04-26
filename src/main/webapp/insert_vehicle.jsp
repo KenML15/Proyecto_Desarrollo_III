@@ -13,8 +13,8 @@
             <h2>Ingreso de Vehículos</h2>
         </div>
 
-        <div style="background: yellow; padding: 10px; color: black;">
-            Debug: 
+        <div class="debug-banner">
+            Debug:
             <c:choose>
                 <c:when test="${empty customers}">
                     LA LISTA ESTÁ VACÍA O ES NULA.
@@ -57,13 +57,13 @@
 
                 <div class="buttons">
                     <input type="submit" value="Guardar vehiculo" class="save">
-                    <input type="reset" value="Cancelar" class="cancel">                
+                    <input type="reset" value="Cancelar" class="cancel">
                 </div>
             </form>
         </div>
 
-        <div class="contenedor-centrado" style="text-align: center; margin-top: 20px;">
-            <button type="button" onclick="location.href = 'main_menu.html'" class="cancel" style="padding: 10px 20px;">
+        <div class="contenedor-centrado">
+            <button type="button" onclick="location.href = 'main_menu.html'" class="cancel">
                 Volver al inicio
             </button>
         </div>

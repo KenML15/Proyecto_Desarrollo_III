@@ -16,11 +16,7 @@ import model.dao.CustomerDAO;
 import model.entity.Customer;
 
 /**
- *
  * @author Jefferson
- */
-/**
- * Gestión de Clientes
  */
 @WebServlet("/customers")
 public class CustomerController extends HttpServlet {
@@ -36,18 +32,25 @@ public class CustomerController extends HttpServlet {
             throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
-        String action = request.getParameter("action");
-        String name = request.getParameter("name");
+        String action     = request.getParameter("action");
+        String name       = request.getParameter("name");
         boolean disability = request.getParameter("discapacity") != null;
+        String cedula     = request.getParameter("cedula");
+        String telefono   = request.getParameter("telefono");
+        String correo     = request.getParameter("correo");
 
         if ("update".equalsIgnoreCase(action)) {
-            // Para actualizar sí ocupamos el ID que viene oculto
             int id = Integer.parseInt(request.getParameter("id"));
             Customer customer = new Customer(id, name, disability);
+            customer.setCedula(cedula);
+            customer.setTelefono(telefono);
+            customer.setCorreo(correo);
             customerDAO.update(customer);
         } else {
-            // Para insertar, mandamos un ID temporal (como 0) ya que la BD lo ignora
             Customer customer = new Customer(0, name, disability);
+            customer.setCedula(cedula);
+            customer.setTelefono(telefono);
+            customer.setCorreo(correo);
             customerDAO.insert(customer);
         }
 
@@ -60,20 +63,17 @@ public class CustomerController extends HttpServlet {
 
         String action = request.getParameter("action");
 
-        //eliminar cliente
         if ("delete".equalsIgnoreCase(action)) {
             int customerId = Integer.parseInt(request.getParameter("id"));
             customerDAO.delete(customerId);
             response.sendRedirect("customers");
 
-            //editar cliente (
         } else if ("edit".equalsIgnoreCase(action)) {
             int customerId = Integer.parseInt(request.getParameter("id"));
             Customer customer = customerDAO.findById(customerId);
             request.setAttribute("customer", customer);
             request.getRequestDispatcher("edit_customer.jsp").forward(request, response);
 
-            //listar todos los clientes
         } else {
             List<Customer> customers = customerDAO.findAll();
             request.setAttribute("customers", customers);

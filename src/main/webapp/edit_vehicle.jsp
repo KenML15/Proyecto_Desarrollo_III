@@ -34,7 +34,7 @@
 
                 <div class="buttons">
                     <input type="submit" value="Actualizar" class="save">
-                    <a href="vehicles" class="cancel" style="text-decoration:none; padding:10px;">Cancelar</a>
+                    <a href="vehicles" class="cancel">Cancelar</a>
                 </div>
             </form>
         </div>

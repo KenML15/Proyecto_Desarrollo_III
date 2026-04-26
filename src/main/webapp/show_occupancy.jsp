@@ -1,21 +1,31 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="CSS/style.css">
-        <title>OcupaciÛn en Tiempo Real</title>
+        <title>Ocupaci√≥n en Tiempo Real</title>
     </head>
     <body>
         <div id="titulo">
-            <h2>VehÌculos en el Parqueo</h2>
+            <c:choose>
+                <c:when test="${not empty lotId}">
+                    <h2>Ocupaci√≥n Actual ‚Äî ${activeAssignments[0].lotName}</h2>
+                </c:when>
+                <c:otherwise>
+                    <h2>Veh√≠culos en el Parqueo</h2>
+                </c:otherwise>
+            </c:choose>
         </div>
-        <div class="container">
-            <table border="1" style="width: 100%; border-collapse: collapse;">
+        <div class="container container--wide">
+            <table border="1" id="table">
                 <tr id="encabezado">
-                    <th>Placa del VehÌculo</th>
-                    <th>UbicaciÛn (Parqueo)</th> <th>Hora de Entrada</th>
+                    <th>Placa del Veh√≠culo</th>
+                    <th>Ubicaci√≥n (Parqueo)</th>
+                    <th>Hora de Entrada</th>
                     <th>Estado Actual</th>
+                    <th>Acciones</th>
                 </tr>
                 <c:forEach var="a" items="${activeAssignments}">
                     <tr>
@@ -23,15 +33,12 @@
                         <td><c:out value="${a.lotName}"/></td>
                         <td><c:out value="${a.entryTime}"/></td>
                         <td>
-                            <span style="background-color: #27ae60; color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.8rem;">
-                                PARQUEADO
-                            </span>
+                            <span class="badge-parked">PARQUEADO</span>
                         </td>
                         <td>
-                            <a href="${pageContext.request.contextPath}/assignments?action=release&id=${a.id}" 
-                               class="cancel" 
-                               style="padding: 5px 10px; text-decoration: none; font-size: 0.8rem;"
-                               onclick="return confirm('øConfirmar salida del vehÌculo ${a.plateVehicle}?')">
+                            <a href="${pageContext.request.contextPath}/assignments?action=release&id=${a.id}"
+                               class="cancel btn-table"
+                               onclick="return confirm('¬øConfirmar salida del veh√≠culo ${a.plateVehicle}?')">
                                 Registrar Salida
                             </a>
                         </td>
@@ -39,7 +46,14 @@
                 </c:forEach>
             </table>
             <br>
-            <a href="main_menu.html" class="cancel">Volver al Men˙</a>
+            <c:choose>
+                <c:when test="${not empty lotId}">
+                    <a href="parkingLot" class="cancel">‚Üê Volver a Gestionar Parqueos</a>
+                </c:when>
+                <c:otherwise>
+                    <a href="main_menu.html" class="cancel">Volver al Men√∫</a>
+                </c:otherwise>
+            </c:choose>
         </div>
     </body>
 </html>

@@ -18,9 +18,18 @@
                 <label>Nombre Completo</label>
                 <input type="text" name="name" required placeholder="Ej: Kenneth Miranda">
 
-                <div style="margin: 20px 0; display: flex; align-items: center; gap: 10px;">
-                    <input type="checkbox" name="discapacity" id="discapacity" style="width: auto; margin: 0;">
-                    <label for="discapacity" style="margin: 0; font-weight: normal;">
+                <label>Cédula</label>
+                <input type="text" name="cedula" placeholder="Ej: 1-2345-6789">
+
+                <label>Teléfono</label>
+                <input type="text" name="telefono" placeholder="Ej: 8888-8888">
+
+                <label>Correo Electrónico</label>
+                <input type="text" name="correo" placeholder="Ej: cliente@correo.com">
+
+                <div class="checkbox-row">
+                    <input type="checkbox" name="discapacity" id="discapacity">
+                    <label for="discapacity" class="checkbox-label">
                         ¿El cliente presenta alguna discapacidad?
                     </label>
                 </div>
@@ -32,8 +41,8 @@
             </form>
         </div>
 
-        <div class="contenedor-centrado" style="text-align: center; margin-top: 20px;">
-            <button type="button" onclick="location.href = 'main_menu.html'" class="cancel" style="padding: 10px 20px;">
+        <div class="contenedor-centrado">
+            <button type="button" onclick="location.href = 'main_menu.html'" class="cancel">
                 Volver al inicio
             </button>
         </div>

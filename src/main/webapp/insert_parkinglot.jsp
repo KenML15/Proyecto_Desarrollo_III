@@ -1,6 +1,6 @@
-<%-- 
+<%--
     Document   : insert_parckinglot
-    Created on : 11 abr 2026, 5:13:44 p. m.
+    Created on : 11 abr 2026, 5:13:44 p. m.
     Author     : pablo
 --%>
 
@@ -12,13 +12,10 @@
         <title>Insertar parqueo</title>
         <link rel="stylesheet" href="CSS/style.css"/>
     </head>
-
     <body>
 
         <div id="titulo">
-
             <h2>Creacion de parqueos</h2>
-
         </div>
 
         <div class="container">
@@ -37,12 +34,10 @@
             </form>
         </div>
 
-    </form>
-</div>
-<div class="contenedor-centrado" style="text-align: center; margin-top: 20px;">
-    <button type="button" onclick="location.href = 'main_menu.html'" class="cancel" style="padding: 10px 20px;">
-        Volver al inicio
-    </button>
-</div>
-</body>
+        <div class="contenedor-centrado">
+            <button type="button" onclick="location.href = 'main_menu.html'" class="cancel">
+                Volver al inicio
+            </button>
+        </div>
+    </body>
 </html>

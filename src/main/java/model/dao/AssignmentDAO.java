@@ -82,6 +82,34 @@ public class AssignmentDAO {
         return list;
     }
 
+    public List<VehicleAssignment> findActiveAssignmentsByLot(int lotId) {
+        List<VehicleAssignment> list = new ArrayList<>();
+        String sql = "SELECT va.id, va.plate_vehicle, va.id_parking_lot, va.entry_time, va.status, p.name AS lot_name "
+                + "FROM vehicle_assignment va "
+                + "JOIN parking_lot p ON va.id_parking_lot = p.id "
+                + "WHERE UPPER(TRIM(va.status)) = 'ACTIVE' AND va.id_parking_lot = ? "
+                + "ORDER BY va.entry_time DESC";
+
+        try (Connection conn = DbConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, lotId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    VehicleAssignment va = new VehicleAssignment();
+                    va.setId(rs.getInt("id"));
+                    va.setPlateVehicle(rs.getString("plate_vehicle"));
+                    va.setLotName(rs.getString("lot_name"));
+                    va.setEntryTime(rs.getTimestamp("entry_time"));
+                    va.setStatus(rs.getString("status").trim());
+                    list.add(va);
+                }
+            }
+            System.out.println(">>> DAO_FINAL: Enviando " + list.size() + " registros ACTIVOS para lotId=" + lotId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     public boolean releaseVehicle(int assignmentId) {
         // Solo actualiza si el registro está ACTIVE
         String sql = "UPDATE vehicle_assignment SET status = 'INACTIVE' WHERE id = ? AND status = 'ACTIVE'";

@@ -1,6 +1,6 @@
-<%-- 
+<%--
     Document   : show_all_customer
-    Created on : 12 abr 2026, 10:23:49 p. m.
+    Created on : 12 abr 2026, 10:23:49 p. m.
     Author     : pablo
 --%>
 
@@ -18,11 +18,14 @@
             <h2>Gestión de Clientes</h2>
         </div>
 
-        <div class="container" style="max-width: 800px;">
-            <table border="1" id="table" style="width: 100%; border-collapse: collapse;">
+        <div class="container container--wide">
+            <table border="1" id="table">
                 <tr id="encabezado">
                     <th>ID</th>
                     <th>Nombre</th>
+                    <th>Cédula</th>
+                    <th>Teléfono</th>
+                    <th>Correo</th>
                     <th>Discapacidad</th>
                     <th>Acciones</th>
                 </tr>
@@ -30,18 +33,22 @@
                     <tr>
                         <td><c:out value="${c.id}"/></td>
                         <td><c:out value="${c.name}"/></td>
+                        <td><c:out value="${c.cedula}"/></td>
+                        <td><c:out value="${c.telefono}"/></td>
+                        <td><c:out value="${c.correo}"/></td>
                         <td><c:out value="${c.disabilityPresented ? 'Sí' : 'No'}"/></td>
                         <td>
-                            <a href="customers?action=edit&id=${c.id}" class="save" style="padding: 5px 10px; text-decoration: none; font-size: 0.8rem;">Editar</a>
-                            <a href="customers?action=delete&id=${c.id}" class="cancel" style="padding: 5px 10px; text-decoration: none; font-size: 0.8rem;" onclick="return confirm('¿Eliminar cliente?')">Eliminar</a>
+                            <a href="customers?action=edit&id=${c.id}" class="save btn-table">Editar</a>
+                            <a href="customers?action=delete&id=${c.id}" class="cancel btn-table"
+                               onclick="return confirm('¿Eliminar cliente?')">Eliminar</a>
                         </td>
                     </tr>
                 </c:forEach>
             </table>
         </div>
-        
-        <div style="margin-top: 20px;">
-            <a href="main_menu.html" class="cancel" style="text-decoration: none; padding: 10px 20px;">Volver al menú</a>
+
+        <div class="footer-nav">
+            <a href="main_menu.html" class="cancel">Volver al menú</a>
         </div>
     </body>
 </html>
