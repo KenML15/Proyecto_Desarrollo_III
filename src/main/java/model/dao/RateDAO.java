@@ -31,19 +31,26 @@ public class RateDAO {
         }
     }
 
-    public float getRateByVehicleType(int idVehicleType) {
-        String sql = "SELECT amount_per_hour FROM rate WHERE id_vehicle_type = ?";
-        try (Connection conn = DbConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, idVehicleType);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                return rs.getFloat("amount_per_hour");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+ public Rate getFullRateByVehicleType(int idVehicleType) {
+    String sql = "SELECT * FROM rate WHERE id_vehicle_type = ?";
+    try (Connection conn = DbConnection.getConnection(); 
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        pstmt.setInt(1, idVehicleType);
+        ResultSet rs = pstmt.executeQuery();
+        if (rs.next()) {
+            return new Rate(
+                rs.getInt("id_vehicle_type"),
+                rs.getFloat("half_hour_fee"),
+                rs.getFloat("hour_fee"),
+                rs.getFloat("day_fee"),
+                rs.getFloat("week_fee"),
+                rs.getFloat("month_fee"),
+                rs.getFloat("year_fee")
+            );
         }
-        return 0.0f;
-    }
+    } catch (SQLException e) { e.printStackTrace(); }
+    return null;
+}
 
     public boolean saveOrUpdateRate(Rate rate) {
         String sql = "INSERT INTO rate (id_vehicle_type, half_hour_fee, hour_fee, day_fee, week_fee, month_fee, year_fee) "

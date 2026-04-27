@@ -16,7 +16,7 @@ public class Vehicle {
     private String model;
     private int idVehicleType;
     private int idCustomer;
-    private String ownerName; // Agrega esto
+    private String ownerName; 
 
 // Agrega el getter y setter
     public String getOwnerName() {

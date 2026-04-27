@@ -19,9 +19,11 @@ model\entity\Rate.class
 model\entity\Space.class
 model\entity\VehicleType.class
 controller\CustomerController.class
+Pruebas\MainTest.class
 model\entity\Customer.class
 model\data\JakartaRestConfiguration.class
 model\dao\DbConnection.class
 model\dao\CustomerDAO.class
 model\dao\TicketDAO.class
 model\dao\VehicleDAO.class
+model\service\PaymentService.class

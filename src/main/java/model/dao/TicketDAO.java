@@ -9,6 +9,9 @@ package model.dao;
  * @author Kenneth
  */
 import java.sql.*;
+import model.entity.Customer;
+import model.entity.Ticket;
+import model.entity.Vehicle;
 
 public class TicketDAO {
 
@@ -72,4 +75,35 @@ public class TicketDAO {
         }
         return -1; // No se encontró ticket activo
     }
+    //detalles completos del ticket
+    public Ticket getActiveTicketDetails(String plate) {
+    String sql = "SELECT t.*, c.disability, v.id_vehicle_type " +
+                 "FROM ticket t " +
+                 "JOIN customer c ON t.id_customer = c.id " +
+                 "JOIN vehicle v ON t.vehicle_plate = v.plate " +
+                 "WHERE t.vehicle_plate = ? AND t.exit_date IS NULL";
+    
+    try (Connection conn = DbConnection.getConnection(); 
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        pstmt.setString(1, plate);
+        ResultSet rs = pstmt.executeQuery();
+        if (rs.next()) {
+            Ticket t = new Ticket();
+            t.setId(rs.getInt("id"));
+            t.setEntryDate(rs.getTimestamp("entry_date").toLocalDateTime());
+            
+            // Cargar datos mínimos necesarios para el cálculo
+            Customer c = new Customer();
+            c.setDisabilityPresented(rs.getBoolean("disability"));
+            t.setCustomer(c);
+            
+            Vehicle v = new Vehicle();
+            v.setIdVehicleType(rs.getInt("id_vehicle_type"));
+            t.setVehicle(v);
+            
+            return t;
+        }
+    } catch (SQLException e) { e.printStackTrace(); }
+    return null;
+}
 }

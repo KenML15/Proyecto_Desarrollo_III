@@ -15,6 +15,9 @@
             <h2>Formulario de registro</h2>
 
             <form action="customers" method="post">
+                
+                <input type="hidden" name="action" value="insertar">
+                
                 <label>Nombre Completo</label>
                 <input type="text" name="name" required placeholder="Ej: Kenneth Miranda">
 
