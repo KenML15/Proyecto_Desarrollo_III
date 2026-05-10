@@ -596,3 +596,59 @@ input[type="checkbox"] {
     padding: 10px;
     border-bottom: 1px solid #2d3748;
 }
+
+/* Badge de rol en el header */
+.role-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+}
+
+.role-admin {
+    background-color: #2c3e50;
+    color: #f1c40f;
+    border: 1px solid #f1c40f;
+}
+
+.role-clerk {
+    background-color: #1a6b3c;
+    color: #d5f5e3;
+    border: 1px solid #27ae60;
+}
+
+/* Sección exclusiva de admin: borde diferenciador */
+.menu-section-admin {
+    border-left: 4px solid #e74c3c;
+    padding-left: 12px;
+}
+
+.menu-section-admin h3 {
+    color: #c0392b;
+}
+
+/* Tarjetas de admin con acento rojo */
+.menu-card-admin {
+    border-top: 3px solid #e74c3c;
+}
+
+.menu-card-admin:hover {
+    background-color: #fdf2f2;
+    border-color: #c0392b;
+}
+
+/* Mensaje de acceso denegado */
+.error-msg {
+    color: #c0392b;
+    background: #fdf2f2;
+    border: 1px solid #e74c3c;
+    padding: 10px 16px;
+    border-radius: 6px;
+    margin: 10px auto;
+    max-width: 600px;
+    text-align: center;
+    font-weight: 500;
+}

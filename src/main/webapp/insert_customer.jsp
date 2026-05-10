@@ -6,18 +6,19 @@
         <title>Ingreso de Clientes</title>
         <link rel="stylesheet" href="CSS/style.css"/>
     </head>
-    <body>
+    <%-- data-menu indica a qué menú regresa el confirmYes() según el rol --%>
+    <body data-menu="${sessionScope.role == 'admin' ? 'menu_admin.jsp' : 'menu_clerk.jsp'}">
+
         <div id="titulo">
             <h2>Gestión de Clientes</h2>
         </div>
 
         <div class="container">
             <h2>Formulario de registro</h2>
-
             <form action="customers" method="post">
-                
+
                 <input type="hidden" name="action" value="insertar">
-                
+
                 <label>Nombre Completo</label>
                 <input type="text" name="name" required placeholder="Ej: Kenneth Miranda">
 
@@ -39,15 +40,23 @@
 
                 <div class="buttons">
                     <button type="submit" class="save">Guardar cliente</button>
-                    <button type="reset" class="cancel">Limpiar</button>
+                    <%-- Cancelar abre el modal JS en lugar de redirigir directo --%>
+                    <button type="button" class="cancel" onclick="cancelar()">Cancelar</button>
                 </div>
             </form>
         </div>
 
-        <div class="contenedor-centrado">
-            <button type="button" onclick="location.href = 'main_menu.html'" class="cancel">
-                Volver al inicio
-            </button>
+        <%-- Modal de confirmación de cancelación (patrón Lab02) --%>
+        <div id="confirmBox" class="confirm-box">
+            <div class="confirm-content">
+                <p>¿Desea cancelar el registro del cliente?</p>
+                <div class="confirm-buttons">
+                    <button class="btn yes" onclick="confirmYes()">Sí</button>
+                    <button class="btn no"  onclick="confirmNo()">No</button>
+                </div>
+            </div>
         </div>
+
+        <script src="js/Customer.js"></script>
     </body>
 </html>

@@ -35,5 +35,9 @@
                 <button type="submit" class="btn-save-slots">Guardar Cambios</button>
             </form>
         </div>
+        <div class="footer-nav">
+            <a href="menu_admin.jsp" id="boton-volver">Volver al menu</a>
+        </div>
+
     </body>
 </html>

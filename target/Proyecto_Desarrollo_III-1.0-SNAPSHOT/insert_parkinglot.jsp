@@ -1,26 +1,21 @@
-<%--
-    Document   : insert_parckinglot
-    Created on : 11 abr 2026, 5:13:44 p. m.
-    Author     : pablo
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Insertar parqueo</title>
+        <title>Insertar Parqueo</title>
         <link rel="stylesheet" href="CSS/style.css"/>
     </head>
-    <body>
+    <body data-menu="menu_admin.jsp">
 
         <div id="titulo">
-            <h2>Creacion de parqueos</h2>
+            <h2>Creación de Parqueos</h2>
         </div>
 
         <div class="container">
             <h2>Datos a ingresar</h2>
             <form action="parkingLot" method="post">
+
                 <label>Nombre del Parqueo</label>
                 <input type="text" name="name" required placeholder="Ej: Parqueo Central">
 
@@ -29,15 +24,22 @@
 
                 <div class="buttons">
                     <input type="submit" value="Guardar parqueo" class="save">
-                    <input type="reset" value="Limpiar" class="cancel">
+                    <button type="button" class="cancel" onclick="cancelar()">Cancelar</button>
                 </div>
             </form>
         </div>
 
-        <div class="contenedor-centrado">
-            <button type="button" onclick="location.href = 'main_menu.html'" class="cancel">
-                Volver al inicio
-            </button>
+        <%-- Modal de confirmación de cancelación (patrón Lab02) --%>
+        <div id="confirmBox" class="confirm-box">
+            <div class="confirm-content">
+                <p>¿Desea cancelar el registro del parqueo?</p>
+                <div class="confirm-buttons">
+                    <button class="btn yes" onclick="confirmYes()">Sí</button>
+                    <button class="btn no"  onclick="confirmNo()">No</button>
+                </div>
+            </div>
         </div>
+
+        <script src="js/ParkingLot.js"></script>
     </body>
 </html>

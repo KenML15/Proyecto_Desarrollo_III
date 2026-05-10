@@ -7,7 +7,7 @@
         <title>Editar Cliente</title>
         <link rel="stylesheet" href="CSS/style.css"/>
     </head>
-    <body>
+    <body data-menu="${sessionScope.role == 'admin' ? 'menu_admin.jsp' : 'menu_clerk.jsp'}">
 
         <div id="titulo">
             <h2>Modificar Datos del Cliente</h2>
@@ -40,14 +40,22 @@
 
                 <div class="buttons">
                     <input type="submit" value="Actualizar Cambios" class="save">
-                    <a href="customers" class="cancel">Cancelar</a>
+                    <button type="button" class="cancel" onclick="cancelar()">Cancelar</button>
                 </div>
             </form>
         </div>
 
-        <div class="footer-nav">
-            <a href="main_menu.html" id="boton-volver">Volver al inicio</a>
+        <%-- Modal de confirmación de cancelación (patrón Lab02) --%>
+        <div id="confirmBox" class="confirm-box">
+            <div class="confirm-content">
+                <p>¿Desea cancelar la edición del cliente?</p>
+                <div class="confirm-buttons">
+                    <button class="btn yes" onclick="confirmYes()">Sí</button>
+                    <button class="btn no"  onclick="confirmNo()">No</button>
+                </div>
+            </div>
         </div>
 
+        <script src="js/Customer.js"></script>
     </body>
 </html>

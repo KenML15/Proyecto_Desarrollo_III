@@ -64,11 +64,16 @@
                     </c:if>
                 </tbody>
             </table>
-            
+
             <div style="margin-top: 20px; text-align: center;">
                 <a href="assignments?action=dashboard" class="btn-table" style="text-decoration: none; background: #4a5568;">
                     Volver al Dashboard
                 </a>
             </div>
-        </div> </body>
+        </div> 
+        <div class="footer-nav">
+            <a href="menu_admin.jsp" id="boton-volver">Volver al menu</a>
+        </div>
+
+    </body>
 </html>

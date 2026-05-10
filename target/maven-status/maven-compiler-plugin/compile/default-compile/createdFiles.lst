@@ -11,6 +11,7 @@ model\entity\ParkingSpace.class
 controller\VehicleController.class
 model\dao\RateDAO.class
 model\entity\JakartaEE8Resource.class
+controller\RoleFilter.class
 Pruebas\main.class
 model\entity\Ticket.class
 Pruebas\PruebaSysTicketsRate.class
@@ -27,4 +28,6 @@ model\dao\DbConnection.class
 model\dao\CustomerDAO.class
 model\dao\TicketDAO.class
 model\dao\VehicleDAO.class
+model\dao\UserDAO.class
 model\service\PaymentService.class
+controller\LogoutController.class

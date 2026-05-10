@@ -1,9 +1,3 @@
-<%--
-    Document   : show_all_vehicles
-    Created on : 10 abr 2026
-    Author     : Kenneth
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
@@ -14,49 +8,77 @@
         <title>Gestión de Vehículos</title>
     </head>
     <body>
+
         <div id="titulo">
             <h2>Vehículos Registrados</h2>
         </div>
 
+        <%-- Buscador en tiempo real (patrón Lab02) --%>
+        <div class="container">
+            <label for="search">Buscar vehículo:</label>
+            <input type="text" id="search" class="input" placeholder="Placa, marca, modelo, color...">
+        </div>
+
         <div class="container container--medium">
-            <table border="1" id="table">
-                <tr id="encabezado">
-                    <th>Placa</th>
-                    <th>Marca</th>
-                    <th>Modelo</th>
-                    <th>Color</th>
-                    <th>Dueño</th>
-                    <th>Acciones</th>
-                </tr>
-                <c:forEach var="v" items="${vehicles}">
-                    <tr>
-                        <td><c:out value="${v.plate}"/></td>
-                        <td><c:out value="${v.brand}"/></td>
-                        <td><c:out value="${v.model}"/></td>
-                        <td><c:out value="${v.color}"/></td>
-                        <td>
-                            <c:choose>
-                                <c:when test="${not empty v.ownerName}">
-                                    <c:out value="${v.ownerName}"/>
-                                </c:when>
-                                <c:otherwise>
-                                    <span class="text-unassigned">Sin asignar</span>
-                                </c:otherwise>
-                            </c:choose>
-                        </td>
-                        <td>
-                            <a href="vehicles?action=edit&plate=${v.plate}" class="save btn-table">Editar</a>
-                            
-                            <a href="vehicles?action=delete&plate=${v.plate}" class="cancel btn-table"
-                               onclick="return confirm('¿Seguro que desea eliminar el vehículo ${v.plate}?')">Eliminar</a>
-                        </td>
+            <table border="1" id="vehicleTable">
+                <thead>
+                    <tr id="encabezado">
+                        <th>Placa</th>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>Color</th>
+                        <th>Dueño</th>
+                        <th>Acciones</th>
                     </tr>
-                </c:forEach>
+                </thead>
+                <tbody>
+                    <c:forEach var="v" items="${vehicles}">
+                        <tr>
+                            <td><c:out value="${v.plate}"/></td>
+                            <td><c:out value="${v.brand}"/></td>
+                            <td><c:out value="${v.model}"/></td>
+                            <td><c:out value="${v.color}"/></td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${not empty v.ownerName}">
+                                        <c:out value="${v.ownerName}"/>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span class="text-unassigned">Sin asignar</span>
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>
+                                <a href="vehicles?action=edit&plate=${v.plate}" class="save btn-table">Editar</a>
+                                <%-- Modal JS en lugar de confirm() nativo --%>
+                                <button class="cancel btn-table"
+                                        onclick="confirmarEliminar('vehicles?action=delete&plate=${v.plate}', '${v.plate}')">
+                                    Eliminar
+                                </button>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
             </table>
         </div>
 
         <div class="footer-nav">
-            <a href="main_menu.html" class="cancel">Volver al menú</a>
+            <a href="${sessionScope.role == 'admin' ? 'menu_admin.jsp' : 'menu_clerk.jsp'}" class="cancel">
+                Volver al menú
+            </a>
         </div>
+
+        <%-- Modal de confirmación de eliminación --%>
+        <div id="deleteBox" class="confirm-box">
+            <div class="confirm-content">
+                <p>¿Eliminar el vehículo <strong><span id="deleteNombre"></span></strong>?</p>
+                <div class="confirm-buttons">
+                    <button class="btn yes" onclick="deleteYes()">Sí, eliminar</button>
+                    <button class="btn no"  onclick="deleteNo()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+
+        <script src="js/Vehicle.js"></script>
     </body>
 </html>

@@ -71,7 +71,7 @@
             </table>
 
             <div class="footer-nav--lg">
-                <a href="main_menu.html" class="cancel">Volver al Menú</a>
+                <a href="menu_admin.jsp" class="cancel">Volver al Menú</a>
             </div>
         </div>
     </body>
