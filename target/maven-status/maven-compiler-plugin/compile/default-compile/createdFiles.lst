@@ -7,6 +7,7 @@ model\entity\ParkingLot.class
 model\entity\VehicleAssignment.class
 model\dao\AssignmentDAO.class
 controller\LoginController.class
+model\entity\ParkingSpace.class
 controller\VehicleController.class
 model\dao\RateDAO.class
 model\entity\JakartaEE8Resource.class

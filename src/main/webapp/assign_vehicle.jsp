@@ -29,6 +29,9 @@
                     </c:forEach>
                 </select>
 
+                <label>NÚMERO DE ESPACIO (SLOT):</label>
+                <input type="number" name="assignedSlot" placeholder="Ej: 1" required min="1">
+
                 <div class="botones">
                     <button type="submit" class="save">Registrar Ingreso</button>
                     <a href="main_menu.html" class="cancel">Cancelar</a>

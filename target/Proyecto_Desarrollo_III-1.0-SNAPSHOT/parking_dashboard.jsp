@@ -51,6 +51,21 @@
                                 <fmt:formatNumber value="${porcentaje}" maxFractionDigits="2" />% ocupado
                             </small>
                         </td>
+                        <td>
+                            <a href="assignments?action=board&id=${p.id}&name=${p.name}" class="save btn-table btn-table--info">
+                                Ver Tablero
+                            </a>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a href="assignments?action=manageSlots&id=${p.id}" class="save btn-table">
+                                    Configurar Espacios
+                                </a>
+                                <a href="vehicles?action=list" class="btn-table btn-table--info" style="background-color: #f39c12;">
+                                    Editar Vehículos
+                                </a>
+                            </div>
+                        </td>
                     </tr>
                 </c:forEach>
             </table>

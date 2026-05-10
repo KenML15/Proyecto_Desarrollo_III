@@ -12,18 +12,7 @@
         <div id="titulo">
             <h2>Ingreso de Vehículos</h2>
         </div>
-
-        <div class="debug-banner">
-            Debug:
-            <c:choose>
-                <c:when test="${empty customers}">
-                    LA LISTA ESTÁ VACÍA O ES NULA.
-                </c:when>
-                <c:otherwise>
-                    HAY CLIENTES CARGADOS. Cantidad: ${customers.size()}
-                </c:otherwise>
-            </c:choose>
-        </div>
+ 
 
         <div class="container">
             <h2>Formulario de ingreso</h2>

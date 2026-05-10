@@ -2,13 +2,15 @@ package model.dao;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import model.entity.ParkingLot;
+import model.entity.ParkingSpace;
 import model.entity.VehicleAssignment;
 
 public class AssignmentDAO {
 
-    // Verifica cuántos vehículos hay con estatus 'ACTIVE' en un parqueo
     public boolean hasCapacity(int idParkingLot) {
         String sqlCount = "SELECT COUNT(*) FROM vehicle_assignment WHERE id_parking_lot = ? AND status = 'ACTIVE'";
         String sqlMax = "SELECT number_of_spaces FROM parking_lot WHERE id = ?";
@@ -17,7 +19,6 @@ public class AssignmentDAO {
             int currentOccupancy = 0;
             int maxCapacity = 0;
 
-            // Obtener ocupación actual
             try (PreparedStatement pstmt = conn.prepareStatement(sqlCount)) {
                 pstmt.setInt(1, idParkingLot);
                 ResultSet rs = pstmt.executeQuery();
@@ -26,7 +27,6 @@ public class AssignmentDAO {
                 }
             }
 
-            // Obtener capacidad máxima
             try (PreparedStatement pstmt = conn.prepareStatement(sqlMax)) {
                 pstmt.setInt(1, idParkingLot);
                 ResultSet rs = pstmt.executeQuery();
@@ -42,21 +42,34 @@ public class AssignmentDAO {
         }
     }
 
-    public boolean insert(String plate, int idLot) {
-        String sql = "INSERT INTO vehicle_assignment (plate_vehicle, id_parking_lot, status) VALUES (?, ?, 'ACTIVE')";
-        try (Connection conn = DbConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, plate);
-            pstmt.setInt(2, idLot);
-            return pstmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+public boolean insert(String plate, int idLot, int slotNumber) {
+    // Cambiamos 'slot_number' por 'assigned_slot' que es el nombre real en tu tabla
+    String sql = "INSERT INTO vehicle_assignment (plate_vehicle, id_parking_lot, assigned_slot, entry_time) VALUES (?, ?, ?, NOW())";
+    
+    try (Connection conn = DbConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        
+        ps.setString(1, plate);
+        ps.setInt(2, idLot);
+        ps.setInt(3, slotNumber);
+        
+        // Ejecutamos la inserción
+        int result = ps.executeUpdate();
+        return result > 0;
+        
+    }  catch (SQLException e) {
+    System.out.println("------ ERROR DE CAPA DE DATOS ------");
+    System.out.println("Mensaje: " + e.getMessage());
+    System.out.println("Estado SQL: " + e.getSQLState());
+    System.out.println("Código de Error: " + e.getErrorCode());
+    e.printStackTrace();
+    return false;
+
     }
+}
 
     public List<VehicleAssignment> findActiveAssignments() {
         List<VehicleAssignment> list = new ArrayList<>();
-        // Usamos UPPER y TRIM para que sea imposible que falle por espacios o minúsculas
         String sql = "SELECT va.id, va.plate_vehicle, va.id_parking_lot, va.entry_time, va.status, p.name AS lot_name "
                 + "FROM vehicle_assignment va "
                 + "JOIN parking_lot p ON va.id_parking_lot = p.id "
@@ -74,7 +87,6 @@ public class AssignmentDAO {
                 va.setStatus(rs.getString("status").trim());
                 list.add(va);
             }
-            // Este log es tu brújula: si aquí dice 1, el error está fuera del DAO
             System.out.println(">>> DAO_FINAL: Enviando exactamente " + list.size() + " registros ACTIVOS.");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -94,7 +106,7 @@ public class AssignmentDAO {
             pstmt.setInt(1, lotId);
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
-                    VehicleAssignment va = new VehicleAssignment();
+                    VehicleAssignment va  = new VehicleAssignment();
                     va.setId(rs.getInt("id"));
                     va.setPlateVehicle(rs.getString("plate_vehicle"));
                     va.setLotName(rs.getString("lot_name"));
@@ -111,13 +123,13 @@ public class AssignmentDAO {
     }
 
     public boolean releaseVehicle(int assignmentId) {
-        // Solo actualiza si el registro está ACTIVE
+
         String sql = "UPDATE vehicle_assignment SET status = 'INACTIVE' WHERE id = ? AND status = 'ACTIVE'";
         try (Connection conn = DbConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, assignmentId);
             int rows = pstmt.executeUpdate();
-            return rows > 0; // Devolverá falso si intentas sacar un carro que ya salió
+            return rows > 0;
         } catch (SQLException e) {
             return false;
         }
@@ -125,7 +137,6 @@ public class AssignmentDAO {
 
     public List<ParkingLot> getOccupancyReport() {
         List<ParkingLot> report = new ArrayList<>();
-        // Contamos SOLO los 'ACTIVE' ignorando espacios
         String sql = "SELECT p.id, p.name, p.number_of_spaces, "
                 + "(SELECT COUNT(*) FROM vehicle_assignment va "
                 + " WHERE va.id_parking_lot = p.id "
@@ -148,7 +159,6 @@ public class AssignmentDAO {
     }
 
     public boolean releaseByPlate(String plate) {
-        // Liberamos el carro activo que tenga esa placa
         String sql = "UPDATE vehicle_assignment SET status = 'INACTIVE' WHERE plate_vehicle = ? AND status = 'ACTIVE'";
         try (Connection conn = DbConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, plate);
@@ -157,4 +167,73 @@ public class AssignmentDAO {
             return false;
         }
     }
+
+    //-------------------------------------------TableroParqueo-----------------------------------------------------
+    public List<ParkingSpace> getBoardByParkingLot(int lotId) {
+        List<ParkingSpace> spaces = new ArrayList<>();
+
+        String sql = "SELECT s.slot_number, s.is_disability_only, va.plate_vehicle "
+                + "FROM parking_slot s "
+                + "LEFT JOIN vehicle_assignment va ON s.id_parking_lot = va.id_parking_lot "
+                + "AND s.slot_number = va.assigned_slot AND va.status = 'ACTIVE' "
+                + "WHERE s.id_parking_lot = ? "
+                + "ORDER BY s.slot_number ASC";
+
+        try (Connection conn = DbConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, lotId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    int number = rs.getInt("slot_number");
+                    boolean isDisability = rs.getBoolean("is_disability_only");
+                    String plate = rs.getString("plate_vehicle");
+                    boolean isOccupied = (plate != null);
+
+                    ParkingSpace space = new ParkingSpace(number, isOccupied, plate);
+                    space.setDisability(isDisability);
+
+                    spaces.add(space);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return spaces;
+    }
+
+    public boolean updateSlotType(int lotId, int slotNumber, boolean isDisability) {
+        String sql = "UPDATE parking_slot SET is_disability_only = ? "
+                + "WHERE id_parking_lot = ? AND slot_number = ?";
+        try (Connection conn = DbConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setBoolean(1, isDisability);
+            pstmt.setInt(2, lotId);
+            pstmt.setInt(3, slotNumber);
+
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    public boolean saveOrUpdateSlot(int lotId, int slotNumber, boolean isDisability) {
+    // Usamos INSERT ... ON DUPLICATE KEY para evitar errores si el número de espacio ya existe
+    String sql = "INSERT INTO parking_slot (id_parking_lot, slot_number, is_disability_only) " +
+                 "VALUES (?, ?, ?) " +
+                 "ON DUPLICATE KEY UPDATE is_disability_only = ?";
+    try (Connection conn = DbConnection.getConnection(); 
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setInt(1, lotId);
+        pstmt.setInt(2, slotNumber);
+        pstmt.setBoolean(3, isDisability);
+        pstmt.setBoolean(4, isDisability);
+        
+        return pstmt.executeUpdate() > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
 }

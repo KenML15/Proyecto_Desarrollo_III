@@ -59,38 +59,42 @@ public class ParkingLotDAO {
     }
 
     public boolean delete(int id) {
-        // 1. Primero borramos todas las asignaciones vinculadas a este parqueo
-        String sqlAsignaciones = "DELETE FROM vehicle_assignment WHERE id_parking_lot = ?";
-        // 2. Luego borramos el parqueo
-        String sqlParqueo = "DELETE FROM parking_lot WHERE id = ?";
+    // 1. Borrar asignaciones (Historial)
+    String sqlAsignaciones = "DELETE FROM vehicle_assignment WHERE id_parking_lot = ?";
+    // 2. Borrar espacios (Slots configurados) - ESTA TE FALTA EN TU CÓDIGO
+    String sqlSlots = "DELETE FROM parking_slot WHERE id_parking_lot = ?";
+    // 3. Borrar el parqueo
+    String sqlParqueo = "DELETE FROM parking_lot WHERE id = ?";
 
-        try (Connection conn = DbConnection.getConnection()) {
-            conn.setAutoCommit(false); // Iniciamos una transacción
+    try (Connection conn = DbConnection.getConnection()) {
+        conn.setAutoCommit(false); 
 
-            try (PreparedStatement pstmt1 = conn.prepareStatement(sqlAsignaciones); PreparedStatement pstmt2 = conn.prepareStatement(sqlParqueo)) {
+        try (PreparedStatement ps1 = conn.prepareStatement(sqlAsignaciones);
+             PreparedStatement ps2 = conn.prepareStatement(sqlSlots);
+             PreparedStatement ps3 = conn.prepareStatement(sqlParqueo)) {
 
-                // Borrar hijos
-                pstmt1.setInt(1, id);
-                pstmt1.executeUpdate();
+            ps1.setInt(1, id);
+            ps1.executeUpdate();
 
-                // Borrar padre
-                pstmt2.setInt(1, id);
-                int rows = pstmt2.executeUpdate();
+            ps2.setInt(1, id);
+            ps2.executeUpdate();
 
-                conn.commit(); // Si todo sale bien, guardamos cambios
-                return rows > 0;
+            ps3.setInt(1, id);
+            int rows = ps3.executeUpdate();
 
-            } catch (SQLException e) {
-                conn.rollback(); // Si algo falla, deshacemos todo
-                System.err.println("Error en transacción de borrado: " + e.getMessage());
-                return false;
-            }
+            conn.commit(); 
+            return rows > 0;
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            conn.rollback(); 
+            System.err.println("Error en transacción de borrado: " + e.getMessage());
             return false;
         }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
     }
-
+}
     public boolean update(ParkingLot p) {
         String sql = "UPDATE parking_lot SET name = ?, number_of_spaces = ? WHERE id = ?";
         try (Connection conn = DbConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -117,4 +121,21 @@ public class ParkingLotDAO {
         }
         return null;
     }
+    
+    public boolean saveOrUpdateSlot(int lotId, int slotNumber, boolean isDisability) {
+
+    String sql = "INSERT INTO parking_slot (id_parking_lot, slot_number, is_disability_only) " +
+                 "VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE is_disability_only = ?";
+    try (Connection conn = DbConnection.getConnection(); 
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        pstmt.setInt(1, lotId);
+        pstmt.setInt(2, slotNumber);
+        pstmt.setBoolean(3, isDisability);
+        pstmt.setBoolean(4, isDisability);
+        return pstmt.executeUpdate() > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
 }

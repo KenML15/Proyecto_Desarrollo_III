@@ -473,3 +473,126 @@ input[type="checkbox"] {
     padding: 10px;
     color: black;
 }
+
+.available-disability {
+    background-color: #2980b9; /* Un azul claro o institucional */
+    color: white;
+}
+
+.occupied {
+    background-color: #e74c3c; /* Rojo para ocupados */
+}
+
+.available {
+    background-color: #2ecc71; /* Verde para libres */
+}
+
+/* Contenedor para centrar el formulario de gestión */
+.manage-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #242b38; /* Color similar al fondo del tablero */
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+}
+
+/* Estilo de la tabla de espacios */
+.manage-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    color: #e2e8f0;
+}
+
+.manage-table th {
+    background-color: #2d3748;
+    color: #63b3ed; /* Azul para resaltar encabezados */
+    padding: 15px;
+    text-align: left;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    border-bottom: 2px solid #4a5568;
+}
+
+.manage-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #4a5568;
+}
+
+.manage-table tr:hover {
+    background-color: #2d3748; /* Efecto al pasar el mouse */
+}
+
+/* Personalización del Checkbox */
+.manage-table input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #3182ce; /* Azul para asociar con discapacidad en el tablero */
+}
+
+/* Botón de Guardar */
+.btn-save-slots {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #38a169; /* Verde éxito */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.btn-save-slots:hover {
+    background-color: #2f855a;
+}
+
+.manage-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #242b38;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    color: white;
+}
+
+/* Formulario de entrada */
+.manage-container label {
+    display: block;
+    margin-bottom: 10px;
+    color: #a0aec0;
+}
+
+.manage-container input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    background: #2d3748;
+    border: 1px solid #4a5568;
+    color: white;
+    border-radius: 5px;
+}
+
+/* Tabla de espacios actuales */
+.manage-container table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+.manage-container th {
+    text-align: left;
+    padding: 12px;
+    border-bottom: 2px solid #4a5568;
+    color: #63b3ed;
+}
+
+.manage-container td {
+    padding: 10px;
+    border-bottom: 1px solid #2d3748;
+}
