@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package controller;
 
 import java.io.IOException;
@@ -15,29 +11,22 @@ import javax.servlet.http.HttpServletResponse;
 import model.dao.CustomerDAO;
 import model.entity.Customer;
 
-/**
- * @author Jefferson
- */
 @WebServlet("/customers")
 public class CustomerController extends HttpServlet {
 
-    private CustomerDAO customerDAO;
-
-    public CustomerController() {
-        customerDAO = new CustomerDAO();
-    }
+    private final CustomerDAO customerDAO = new CustomerDAO();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
-        String action     = request.getParameter("action");
-        String name       = request.getParameter("name");
+        String action = request.getParameter("action");
+        String name = request.getParameter("name");
         boolean disability = request.getParameter("discapacity") != null;
-        String cedula     = request.getParameter("cedula");
-        String telefono   = request.getParameter("telefono");
-        String correo     = request.getParameter("correo");
+        String cedula = request.getParameter("cedula");
+        String telefono = request.getParameter("telefono");
+        String correo = request.getParameter("correo");
 
         if ("update".equalsIgnoreCase(action)) {
             int id = Integer.parseInt(request.getParameter("id"));
@@ -64,14 +53,12 @@ public class CustomerController extends HttpServlet {
         String action = request.getParameter("action");
 
         if ("delete".equalsIgnoreCase(action)) {
-            int customerId = Integer.parseInt(request.getParameter("id"));
-            customerDAO.delete(customerId);
+            customerDAO.delete(Integer.parseInt(request.getParameter("id")));
             response.sendRedirect("customers");
 
         } else if ("edit".equalsIgnoreCase(action)) {
-            int customerId = Integer.parseInt(request.getParameter("id"));
-            Customer customer = customerDAO.findById(customerId);
-            request.setAttribute("customer", customer);
+            int id = Integer.parseInt(request.getParameter("id"));
+            request.setAttribute("customer", customerDAO.findById(id));
             request.getRequestDispatcher("edit_customer.jsp").forward(request, response);
 
         } else {

@@ -73,47 +73,47 @@
 <body>
 
 <div id="titulo">
-    <h2>&#x1F4CA; Generación de Reportes PDF</h2>
+    <h2>Generación de Reportes PDF</h2>
 </div>
 
 <div class="reports-grid">
 
     <!-- Reporte 1: Ingresos -->
     <div class="report-card">
-        <div class="report-icon">&#x1F4B0;</div>
+        <div class="report-icon"></div>
         <h3>Reporte de Ingresos</h3>
         <p>
             Muestra el total de dinero cobrado en el sistema, desglosado por tiquete.
             Incluye descuentos por Ley 7600 y totales generales.
         </p>
         <a href="reports?report=income" target="_blank" class="btn-report">
-            &#x1F4C4; Generar PDF
+            Generar PDF
         </a>
     </div>
 
     <!-- Reporte 2: Ocupación -->
     <div class="report-card">
-        <div class="report-icon">&#x1F3E2;</div>
+        <div class="report-icon"></div>
         <h3>Reporte de Ocupación</h3>
         <p>
             Estado actual de todos los parqueos: espacios totales, cuántos están
             ocupados, disponibles y porcentaje de ocupación.
         </p>
         <a href="reports?report=occupancy" target="_blank" class="btn-report">
-            &#x1F4C4; Generar PDF
+            Generar PDF
         </a>
     </div>
 
     <!-- Reporte 3: Historial de tiquetes -->
     <div class="report-card">
-        <div class="report-icon">&#x1F9FE;</div>
+        <div class="report-icon"></div>
         <h3>Historial de Tiquetes</h3>
         <p>
             Listado completo de tiquetes cerrados con placa, cliente, tipo de vehículo,
             duración de estancia, monto cobrado y aplicación de descuentos.
         </p>
         <a href="reports?report=tickets" target="_blank" class="btn-report">
-            &#x1F4C4; Generar PDF
+            Generar PDF
         </a>
     </div>
 

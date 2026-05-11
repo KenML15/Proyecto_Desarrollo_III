@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import model.entity.ParkingLot;
+import model.entity.ParkingSpace;
 import model.entity.Vehicle;
 
 /**
@@ -59,42 +60,41 @@ public class ParkingLotDAO {
     }
 
     public boolean delete(int id) {
-    // 1. Borrar asignaciones (Historial)
-    String sqlAsignaciones = "DELETE FROM vehicle_assignment WHERE id_parking_lot = ?";
-    // 2. Borrar espacios (Slots configurados) - ESTA TE FALTA EN TU CÓDIGO
-    String sqlSlots = "DELETE FROM parking_slot WHERE id_parking_lot = ?";
-    // 3. Borrar el parqueo
-    String sqlParqueo = "DELETE FROM parking_lot WHERE id = ?";
+        // 1. Borrar asignaciones (Historial)
+        String sqlAsignaciones = "DELETE FROM vehicle_assignment WHERE id_parking_lot = ?";
+        // 2. Borrar espacios (Slots configurados) - ESTA TE FALTA EN TU CÓDIGO
+        String sqlSlots = "DELETE FROM parking_slot WHERE id_parking_lot = ?";
+        // 3. Borrar el parqueo
+        String sqlParqueo = "DELETE FROM parking_lot WHERE id = ?";
 
-    try (Connection conn = DbConnection.getConnection()) {
-        conn.setAutoCommit(false); 
+        try (Connection conn = DbConnection.getConnection()) {
+            conn.setAutoCommit(false);
 
-        try (PreparedStatement ps1 = conn.prepareStatement(sqlAsignaciones);
-             PreparedStatement ps2 = conn.prepareStatement(sqlSlots);
-             PreparedStatement ps3 = conn.prepareStatement(sqlParqueo)) {
+            try (PreparedStatement ps1 = conn.prepareStatement(sqlAsignaciones); PreparedStatement ps2 = conn.prepareStatement(sqlSlots); PreparedStatement ps3 = conn.prepareStatement(sqlParqueo)) {
 
-            ps1.setInt(1, id);
-            ps1.executeUpdate();
+                ps1.setInt(1, id);
+                ps1.executeUpdate();
 
-            ps2.setInt(1, id);
-            ps2.executeUpdate();
+                ps2.setInt(1, id);
+                ps2.executeUpdate();
 
-            ps3.setInt(1, id);
-            int rows = ps3.executeUpdate();
+                ps3.setInt(1, id);
+                int rows = ps3.executeUpdate();
 
-            conn.commit(); 
-            return rows > 0;
+                conn.commit();
+                return rows > 0;
 
+            } catch (SQLException e) {
+                conn.rollback();
+                System.err.println("Error en transacción de borrado: " + e.getMessage());
+                return false;
+            }
         } catch (SQLException e) {
-            conn.rollback(); 
-            System.err.println("Error en transacción de borrado: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
-        return false;
     }
-}
+
     public boolean update(ParkingLot p) {
         String sql = "UPDATE parking_lot SET name = ?, number_of_spaces = ? WHERE id = ?";
         try (Connection conn = DbConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -110,32 +110,51 @@ public class ParkingLotDAO {
 
     public ParkingLot findById(int id) {
         String sql = "SELECT * FROM parking_lot WHERE id = ?";
-        try (Connection conn = DbConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, id);
-            ResultSet rs = pstmt.executeQuery();
+        try (Connection conn = DbConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return new ParkingLot(rs.getInt("id"), rs.getString("name"), rs.getInt("number_of_spaces"));
+                ParkingLot lot = new ParkingLot();
+                lot.setId(rs.getInt("id"));
+                lot.setName(rs.getString("name"));
+                lot.setNumberOfSpaces(rs.getInt("number_of_spaces")); // Este es el dato clave
+                return lot;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
-    
+
     public boolean saveOrUpdateSlot(int lotId, int slotNumber, boolean isDisability) {
 
-    String sql = "INSERT INTO parking_slot (id_parking_lot, slot_number, is_disability_only) " +
-                 "VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE is_disability_only = ?";
-    try (Connection conn = DbConnection.getConnection(); 
-         PreparedStatement pstmt = conn.prepareStatement(sql)) {
-        pstmt.setInt(1, lotId);
-        pstmt.setInt(2, slotNumber);
-        pstmt.setBoolean(3, isDisability);
-        pstmt.setBoolean(4, isDisability);
-        return pstmt.executeUpdate() > 0;
-    } catch (SQLException e) {
-        e.printStackTrace();
-        return false;
+        String sql = "INSERT INTO parking_slot (id_parking_lot, slot_number, is_disability_only) "
+                + "VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE is_disability_only = ?";
+        try (Connection conn = DbConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, lotId);
+            pstmt.setInt(2, slotNumber);
+            pstmt.setBoolean(3, isDisability);
+            pstmt.setBoolean(4, isDisability);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
+    
+    public ParkingSpace getSlotInfo(int idLot, int slotNumber) {
+    String sql = "SELECT is_disability_only FROM parking_slot WHERE id_parking_lot = ? AND slot_number = ?";
+    try (Connection conn = DbConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, idLot);
+        ps.setInt(2, slotNumber);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            ParkingSpace sp = new ParkingSpace();
+            sp.setDisability(rs.getBoolean("is_disability"));
+            return sp;
+        }
+    } catch (SQLException e) { e.printStackTrace(); }
+    return null; 
 }
 }

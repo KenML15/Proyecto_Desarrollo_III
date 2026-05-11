@@ -7,22 +7,22 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.dao.VehicleDAO;
-import model.dao.ParkingLotDAO;
 import model.dao.AssignmentDAO;
+import model.dao.ParkingLotDAO;
 import model.dao.TicketDAO;
-import model.entity.Vehicle;
+import model.dao.VehicleDAO;
 import model.entity.ParkingLot;
 import model.entity.ParkingSpace;
+import model.entity.Vehicle;
 import model.entity.VehicleAssignment;
 
 @WebServlet("/assignments")
 public class AssignmentController extends HttpServlet {
 
-    private VehicleDAO vehicleDAO = new VehicleDAO();
-    private ParkingLotDAO parkingDAO = new ParkingLotDAO();
-    private AssignmentDAO assignmentDAO = new AssignmentDAO();
-    private TicketDAO ticketDAO = new TicketDAO();
+    private final VehicleDAO vehicleDAO = new VehicleDAO();
+    private final ParkingLotDAO parkingDAO = new ParkingLotDAO();
+    private final AssignmentDAO assignmentDAO = new AssignmentDAO();
+    private final TicketDAO ticketDAO = new TicketDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -30,28 +30,25 @@ public class AssignmentController extends HttpServlet {
 
         String action = request.getParameter("action");
 
-        // --- 1. PREPARAR ASIGNACIÓN (Vista) ---
         if ("prepare".equalsIgnoreCase(action)) {
-            List<Vehicle> vehicles = vehicleDAO.findAll();
-            List<ParkingLot> lots = parkingDAO.findAll();
-            request.setAttribute("vehicles", vehicles);
-            request.setAttribute("parkingLots", lots);
+            request.setAttribute("vehicles", vehicleDAO.findAll());
+            request.setAttribute("parkingLots", parkingDAO.findAll());
             request.getRequestDispatcher("assign_vehicle.jsp").forward(request, response);
             return;
         }
 
-        // --- 2. LISTAR OCUPACIÓN (Vista) ---
         if ("list".equalsIgnoreCase(action)) {
             String lotIdStr = request.getParameter("lotId");
             List<VehicleAssignment> activeList;
             if (lotIdStr != null && !lotIdStr.isEmpty()) {
-                try {
-                    int lotId = Integer.parseInt(lotIdStr);
-                    activeList = assignmentDAO.findActiveAssignmentsByLot(lotId);
-                    request.setAttribute("lotId", lotId);
-                } catch (NumberFormatException e) {
-                    activeList = assignmentDAO.findActiveAssignments();
+                int filterLotId = Integer.parseInt(lotIdStr);
+                activeList = new java.util.ArrayList<>();
+                for (VehicleAssignment va : assignmentDAO.findActiveAssignments()) {
+                    if (va.getIdParkingLot() == filterLotId) {
+                        activeList.add(va);
+                    }
                 }
+                request.setAttribute("lotId", lotIdStr);
             } else {
                 activeList = assignmentDAO.findActiveAssignments();
             }
@@ -60,58 +57,38 @@ public class AssignmentController extends HttpServlet {
             return;
         }
 
-        // --- 3. LIBERAR VEHÍCULO (Acción desde enlace) ---
         if ("release".equalsIgnoreCase(action)) {
-            try {
-                int id = Integer.parseInt(request.getParameter("id"));
-                assignmentDAO.releaseVehicle(id);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            response.sendRedirect("assignments?action=list&nocache=" + System.currentTimeMillis());
+            assignmentDAO.releaseVehicle(Integer.parseInt(request.getParameter("id")));
+            response.sendRedirect("assignments?action=list&msg=success");
             return;
         }
 
-        // --- 4. DASHBOARD (Vista) ---
         if ("dashboard".equalsIgnoreCase(action)) {
-            List<ParkingLot> report = assignmentDAO.getOccupancyReport();
-            request.setAttribute("report", report);
+            request.setAttribute("report", assignmentDAO.getOccupancyReport());
             request.getRequestDispatcher("parking_dashboard.jsp").forward(request, response);
             return;
         }
 
-
         if ("board".equalsIgnoreCase(action)) {
-            try {
-                int lotId = Integer.parseInt(request.getParameter("id"));
-                List<ParkingSpace> board = assignmentDAO.getBoardByParkingLot(lotId);
-                request.setAttribute("spaces", board);
-                request.setAttribute("lotName", request.getParameter("name"));
-                request.getRequestDispatcher("parking_board_view.jsp").forward(request, response);
-            } catch (Exception e) {
-                response.sendRedirect("assignments?action=dashboard");
-            }
+            int lotId = Integer.parseInt(request.getParameter("id"));
+            String lotName = request.getParameter("name");
+            request.setAttribute("lot", parkingDAO.findById(lotId));
+            request.setAttribute("boardSpaces", assignmentDAO.getBoardByParkingLot(lotId));
+            request.setAttribute("lotName", lotName);
+            request.getRequestDispatcher("parking_board_view.jsp").forward(request, response);
             return;
         }
 
         if ("manageSlots".equalsIgnoreCase(action)) {
-            String idStr = request.getParameter("id");
-            if (idStr != null) {
-                try {
-                    int lotId = Integer.parseInt(idStr);
-                    List<ParkingSpace> currentSlots = assignmentDAO.getBoardByParkingLot(lotId);
-                    request.setAttribute("lotId", lotId);
-                    request.setAttribute("currentSlots", currentSlots);
-                    request.getRequestDispatcher("manage_slots.jsp").forward(request, response);
-                } catch (Exception e) {
-                    response.sendRedirect("assignments?action=dashboard");
-                }
-                return;
-            }
+            int lotId = Integer.parseInt(request.getParameter("id"));
+            request.setAttribute("lot", parkingDAO.findById(lotId));
+            request.setAttribute("lotId", lotId);
+            request.setAttribute("currentSlots", assignmentDAO.getBoardByParkingLot(lotId));
+            request.getRequestDispatcher("manage_slots.jsp").forward(request, response);
+            return;
         }
 
-
-        response.sendRedirect("main_menu.html");
+        response.sendRedirect("menu_admin.jsp");
     }
 
     @Override
@@ -122,63 +99,67 @@ public class AssignmentController extends HttpServlet {
         String action = request.getParameter("action");
 
         if ("saveSlot".equalsIgnoreCase(action)) {
-            try {
-                int idLot = Integer.parseInt(request.getParameter("idParkingLot"));
-                int slotNumber = Integer.parseInt(request.getParameter("slotNumber"));
-                boolean isDisability = request.getParameter("isDisability") != null;
+            int idLot = Integer.parseInt(request.getParameter("idParkingLot"));
+            int slotNumber = Integer.parseInt(request.getParameter("slotNumber"));
+            boolean isDisability = request.getParameter("isDisability") != null;
 
-                parkingDAO.saveOrUpdateSlot(idLot, slotNumber, isDisability);
-                
-
-                response.sendRedirect("assignments?action=manageSlots&id=" + idLot);
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.sendRedirect("assignments?action=dashboard&error=save");
+            ParkingLot lot = parkingDAO.findById(idLot);
+            if (slotNumber > lot.getNumberOfSpaces()) {
+                response.sendRedirect("assignments?action=manageSlots&id=" + idLot + "&error=limit_exceeded");
+                return;
             }
+
+            parkingDAO.saveOrUpdateSlot(idLot, slotNumber, isDisability);
+            response.sendRedirect("assignments?action=manageSlots&id=" + idLot);
             return;
         }
 
         String plate = request.getParameter("plateVehicle");
-        String lotIdStr = request.getParameter("idParkingLot");
-        String slotStr = request.getParameter("assignedSlot");
+        int idLot = Integer.parseInt(request.getParameter("idParkingLot"));
+        int slotNumber = Integer.parseInt(request.getParameter("assignedSlot"));
 
-        if (plate != null && lotIdStr != null && slotStr != null) {
-            try {
-                int idLot = Integer.parseInt(lotIdStr);
-                int slotNumber = Integer.parseInt(slotStr);
+        try {
+            ParkingLot lot = parkingDAO.findById(idLot);
 
-                if (assignmentDAO.hasCapacity(idLot)) {
-                    boolean success = assignmentDAO.insert(plate, idLot, slotNumber);
-                    if (success) {
-                        // Abrir ticket automáticamente al asignar el vehículo
-                        Vehicle vehicle = vehicleDAO.findByPlate(plate);
-                        int idCustomer = (vehicle != null && vehicle.getIdCustomer() > 0)
-                                ? vehicle.getIdCustomer() : 0;
-                        int newTicketId = -1;
-                        if (idCustomer > 0) {
-                            // Solo abrir si no hay ya un ticket activo para esta placa
-                            if (ticketDAO.findActiveTicketByPlate(plate) == -1) {
-                                newTicketId = ticketDAO.openTicket(idCustomer, plate);
-                            }
-                        }
-                        if (newTicketId > 0) {
-                            response.sendRedirect("tickets?action=viewEntry&ticketId=" + newTicketId + "&plate=" + plate + "&lotId=" + idLot + "&slot=" + slotNumber);
-                        } else {
-                            response.sendRedirect("assignments?action=list&msg=assigned");
-                        }
-                    } else {
-                        response.sendRedirect("assignments?action=prepare&error=db");
-                    }
-                } else {
-                    response.sendRedirect("assignments?action=prepare&error=full");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.sendRedirect("assignments?action=prepare&error=data");
+            if (slotNumber > lot.getNumberOfSpaces()) {
+                response.sendRedirect("assignments?action=prepare&error=slot_out_of_range");
+                return;
             }
-            return;
-        }
 
-        response.sendRedirect("main_menu.html");
+            ParkingSpace space = parkingDAO.getSlotInfo(idLot, slotNumber);
+            if (space != null && space.isDisability() && !vehicleDAO.hasDisabilityOwner(plate)) {
+                response.sendRedirect("assignments?action=prepare&error=disability_required");
+                return;
+            }
+
+            if (assignmentDAO.isVehicleAlreadyParked(plate)) {
+                response.sendRedirect("assignments?action=prepare&error=already_parked");
+                return;
+            }
+
+            if (!assignmentDAO.hasCapacity(idLot)) {
+                response.sendRedirect("assignments?action=prepare&error=full");
+                return;
+            }
+
+            if (assignmentDAO.insert(plate, idLot, slotNumber)) {
+                Vehicle vehicle = vehicleDAO.findByPlate(plate);
+                int idCustomer = (vehicle != null) ? vehicle.getIdCustomer() : 0;
+
+                if (idCustomer > 0 && ticketDAO.findActiveTicketByPlate(plate) == -1) {
+                    int newTicketId = ticketDAO.openTicket(idCustomer, plate);
+                    response.sendRedirect("tickets?action=viewEntry&ticketId=" + newTicketId
+                            + "&plate=" + java.net.URLEncoder.encode(plate, "UTF-8")
+                            + "&lotId=" + idLot
+                            + "&slot=" + slotNumber);
+                } else {
+                    response.sendRedirect("assignments?action=list&msg=assigned");
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect("assignments?action=prepare&error=system");
+        }
     }
 }

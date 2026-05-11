@@ -20,10 +20,10 @@
             </c:choose>
         </div>
 
-        <%-- Buscador en tiempo real (patrón Lab02) --%>
-        <div class="container">
-            <label for="search">Buscar vehículo:</label>
-            <input type="text" id="search" class="input" placeholder="Placa, parqueo...">
+        <!-- Buscador en tiempo real (patrón Lab02 + clases del proyecto) -->
+        <div class="search-wrapper">
+            <label for="search">Buscar vehículo</label>
+            <input type="text" id="search" class="input-search" placeholder="Placa, parqueo...">
         </div>
 
         <div class="container container--wide">
@@ -38,6 +38,13 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <c:if test="${empty activeAssignments}">
+                        <tr>
+                            <td colspan="5" style="text-align:center; padding: 24px; color: var(--text-muted);">
+                                No hay vehículos parqueados en este momento.
+                            </td>
+                        </tr>
+                    </c:if>
                     <c:forEach var="a" items="${activeAssignments}">
                         <tr>
                             <td><strong><c:out value="${a.plateVehicle}"/></strong></td>
@@ -49,7 +56,7 @@
                             <td>
                                 <div class="btn-group">
                                     <a href="${pageContext.request.contextPath}/tickets?action=viewActive&amp;plate=${a.plateVehicle}"
-                                       class="save btn-table btn-table--info">&#x1F3AB; Ver Ticket</a>
+                                       class="save btn-table btn-table--info">Ver Ticket</a>
                                     <form action="${pageContext.request.contextPath}/tickets" method="POST" style="display:inline;">
                                         <input type="hidden" name="action" value="salida"/>
                                         <input type="hidden" name="plate" value="${a.plateVehicle}"/>
@@ -61,8 +68,9 @@
                     </c:forEach>
                 </tbody>
             </table>
+        </div>
 
-            <br>
+        <div class="footer-nav footer-nav--lg">
             <c:choose>
                 <c:when test="${not empty lotId}">
                     <a href="parkingLot" class="cancel">← Volver a Gestionar Parqueos</a>
@@ -75,13 +83,14 @@
             </c:choose>
         </div>
 
-        <%-- Modal de confirmación de salida de vehículo --%>
+        <!-- Modal de confirmación de salida de vehículo -->
         <div id="releaseBox" class="confirm-box">
             <div class="confirm-content">
+                
                 <p>¿Confirmar salida del vehículo <strong><span id="releasePlaca"></span></strong>?</p>
                 <div class="confirm-buttons">
-                    <button class="btn yes" onclick="releaseYes()">Sí, registrar salida</button>
-                    <button class="btn no"  onclick="releaseNo()">Cancelar</button>
+                    <button class="btn-modal yes-danger" onclick="releaseYes()">Sí, registrar salida</button>
+                    <button class="btn-modal no"         onclick="releaseNo()">Cancelar</button>
                 </div>
             </div>
         </div>

@@ -197,8 +197,8 @@
 <div id="titulo" class="no-print">
     <h2>
         <c:choose>
-            <c:when test="${entryOnly}">&#x2705; Vehículo Ingresado – Tiquete de Entrada</c:when>
-            <c:otherwise>&#x1F3AB; Tiquete Activo – Vehículo en Parqueo</c:otherwise>
+            <c:when test="${entryOnly}">Vehículo Ingresado – Tiquete de Entrada</c:when>
+            <c:otherwise>Tiquete Activo – Vehículo en Parqueo</c:otherwise>
         </c:choose>
     </h2>
 </div>
@@ -217,16 +217,16 @@
                     <div class="ticket-num">TIQUETE #${ticket.id}</div><br>
                     <c:choose>
                         <c:when test="${entryOnly}">
-                            <span class="status-badge status-active">&#x1F7E2; ACTIVO – EN PARQUEO</span>
+                            <span class="status-badge status-active">ACTIVO – EN PARQUEO</span>
                         </c:when>
                         <c:otherwise>
-                            <span class="status-badge status-active">&#x1F7E2; EN PARQUEO</span>
+                            <span class="status-badge status-active">EN PARQUEO</span>
                         </c:otherwise>
                     </c:choose>
                 </div>
 
                 <%-- ── PARQUEO ── --%>
-                <div class="section-title">&#x1F3E2; Ubicación</div>
+                <div class="section-title">Ubicación</div>
                 <div class="info-row">
                     <span class="lbl">Parqueo</span>
                     <span class="val">${parkingName}</span>
@@ -239,7 +239,7 @@
                 <hr class="dashed-line"/>
 
                 <%-- ── VEHÍCULO ── --%>
-                <div class="section-title">&#x1F697; Vehículo</div>
+                <div class="section-title">Vehículo</div>
                 <div class="info-row">
                     <span class="lbl">Placa</span>
                     <span class="val">${ticket.vehicle.plate}</span>
@@ -261,7 +261,7 @@
 
                 <%-- ── CLIENTE ── --%>
                 <c:if test="${ticket.customer != null}">
-                    <div class="section-title">&#x1F464; Cliente</div>
+                    <div class="section-title">Cliente</div>
                     <div class="info-row">
                         <span class="lbl">Nombre</span>
                         <span class="val">${ticket.customer.name}</span>
@@ -269,7 +269,7 @@
                     <c:if test="${ticket.customer.disabilityPresented}">
                         <div class="info-row">
                             <span class="lbl">Discapacidad</span>
-                            <span class="val" style="color:#16a34a;">&#10003; Desc. 50% (Ley 7600)</span>
+                            <span class="val" style="color:#16a34a;">Desc. 50% (Ley 7600)</span>
                         </div>
                     </c:if>
                 </c:if>
@@ -299,14 +299,14 @@
                 <%-- ── TARIFA ── --%>
                 <c:if test="${rate != null}">
                     <hr class="dashed-line"/>
-                    <div class="section-title">&#x1F4B0; Tarifa por hora (${ticket.vehicle.vehicleTypeDesc})</div>
+                    <div class="section-title">Tarifa por hora (${ticket.vehicle.vehicleTypeDesc})</div>
                     <div class="rate-grid">
-                        <div class="rate-row"><span class="rl">Media hora</span><span>&#x20A1;<fmt:formatNumber value="${rate.halfHour}" type="number" minFractionDigits="2" maxFractionDigits="2"/></span></div>
-                        <div class="rate-row"><span class="rl">1 Hora</span><span>&#x20A1;<fmt:formatNumber value="${rate.hour}" type="number" minFractionDigits="2" maxFractionDigits="2"/></span></div>
-                        <div class="rate-row"><span class="rl">Día</span><span>&#x20A1;<fmt:formatNumber value="${rate.day}" type="number" minFractionDigits="2" maxFractionDigits="2"/></span></div>
-                        <div class="rate-row"><span class="rl">Semana</span><span>&#x20A1;<fmt:formatNumber value="${rate.week}" type="number" minFractionDigits="2" maxFractionDigits="2"/></span></div>
-                        <div class="rate-row"><span class="rl">Mes</span><span>&#x20A1;<fmt:formatNumber value="${rate.month}" type="number" minFractionDigits="2" maxFractionDigits="2"/></span></div>
-                        <div class="rate-row"><span class="rl">Año</span><span>&#x20A1;<fmt:formatNumber value="${rate.year}" type="number" minFractionDigits="2" maxFractionDigits="2"/></span></div>
+                        <div class="rate-row"><span class="rl">Media hora</span><span>CRC <fmt:formatNumber value="${rate.halfHour}" type="number" minFractionDigits="2" maxFractionDigits="2"/></span></div>
+                        <div class="rate-row"><span class="rl">1 Hora</span><span>CRC <fmt:formatNumber value="${rate.hour}" type="number" minFractionDigits="2" maxFractionDigits="2"/></span></div>
+                        <div class="rate-row"><span class="rl">Día</span><span>CRC <fmt:formatNumber value="${rate.day}" type="number" minFractionDigits="2" maxFractionDigits="2"/></span></div>
+                        <div class="rate-row"><span class="rl">Semana</span><span>CRC <fmt:formatNumber value="${rate.week}" type="number" minFractionDigits="2" maxFractionDigits="2"/></span></div>
+                        <div class="rate-row"><span class="rl">Mes</span><span>CRC <fmt:formatNumber value="${rate.month}" type="number" minFractionDigits="2" maxFractionDigits="2"/></span></div>
+                        <div class="rate-row"><span class="rl">Año</span><span>CRC <fmt:formatNumber value="${rate.year}" type="number" minFractionDigits="2" maxFractionDigits="2"/></span></div>
                     </div>
                 </c:if>
 
@@ -314,7 +314,7 @@
                 <c:if test="${!entryOnly && totalAmount > 0}">
                     <div class="total-box">
                         <div class="total-lbl">MONTO ACUMULADO HASTA AHORA</div>
-                        <div class="total-amt">&#x20A1;<fmt:formatNumber value="${totalAmount}" type="number" minFractionDigits="2" maxFractionDigits="2"/></div>
+                        <div class="total-amt">CRC <fmt:formatNumber value="${totalAmount}" type="number" minFractionDigits="2" maxFractionDigits="2"/></div>
                         <c:if test="${ticket.customer.disabilityPresented}">
                             <span class="discount-tag">&#x2605; 50% desc. Ley 7600 incluido</span>
                         </c:if>
@@ -340,7 +340,7 @@
 
                 <%-- Imprimir --%>
                 <button onclick="window.print()" class="btn-entrada">
-                    &#x1F5A8; Imprimir Tiquete
+                    Imprimir Tiquete
                 </button>
 
                 <%-- Registrar Salida (solo si está activo) --%>
@@ -356,7 +356,7 @@
 
                 <%-- Ver historial --%>
                 <a href="tickets" class="save" style="text-decoration:none; padding:10px 20px; border-radius:8px;">
-                    &#x1F4CB; Ver Historial
+                    Ver Historial
                 </a>
 
                 <%-- Volver --%>

@@ -95,7 +95,7 @@
 <body>
 
 <div id="titulo" class="no-print">
-    <h2>&#x1F9FE; Pago Registrado – Recibo</h2>
+    <h2>Pago Registrado – Recibo</h2>
 </div>
 
 <%-- ── RECEIPT ── --%>
@@ -170,7 +170,7 @@ ${ticket.exitDateFormatted}
 <%-- ── ACTIONS ── --%>
 <div class="actions-bar no-print">
     <button onclick="window.print()" class="btn-entrada">
-        &#x1F5A8; Imprimir Recibo
+        Imprimir Recibo
     </button>
     <a href="tickets" class="btn-salida" style="text-decoration:none; padding:10px 20px; border-radius:8px;">
         &#x2795; Nuevo Tiquete

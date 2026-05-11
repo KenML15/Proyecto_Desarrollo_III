@@ -69,11 +69,11 @@
 <body>
 
 <div id="titulo">
-    <h2>&#x1F4B0; Configurar Tarifa</h2>
+    <h2>Configurar Tarifa</h2>
 </div>
 
 <div class="rate-card">
-    <div class="type-badge">&#x1F697; ${vehicleType.description}</div>
+    <div class="type-badge">${vehicleType.description}</div>
 
     <form action="vehicleTypes" method="post">
         <input type="hidden" name="action" value="saveRate"/>

@@ -86,30 +86,30 @@
 <body>
 
 <div id="titulo">
-    <h2>&#x1F9FE; Vista Previa de Salida</h2>
+    <h2>Vista Previa de Salida</h2>
 </div>
 
 <div class="checkout-wrapper" id="printableArea">
 
     <div class="checkout-card">
-        <h3>&#x1F3E2; Parqueo</h3>
+        <h3>Parqueo</h3>
         <div class="info-row"><span>Parqueo</span><span>${parkingName}</span></div>
         <div class="info-row"><span>Espacio N°</span><span>#${slotNumber}</span></div>
 
-        <h3 style="margin-top:22px;">&#x1F697; Vehículo</h3>
+        <h3 style="margin-top:22px;">Vehículo</h3>
         <div class="info-row"><span>Placa</span><span>${ticket.vehicle.plate}</span></div>
         <div class="info-row"><span>Marca / Modelo</span><span>${ticket.vehicle.brand} ${ticket.vehicle.model}</span></div>
         <div class="info-row"><span>Color</span><span>${ticket.vehicle.color}</span></div>
         <div class="info-row"><span>Tipo</span><span>${ticket.vehicle.vehicleTypeDesc}</span></div>
 
-        <h3 style="margin-top:22px;">&#x1F464; Cliente</h3>
+        <h3 style="margin-top:22px;">Cliente</h3>
         <div class="info-row"><span>Nombre</span><span>${ticket.customer.name}</span></div>
         <div class="info-row">
             <span>Discapacidad (Ley 7600)</span>
             <span>
                 <c:choose>
                     <c:when test="${ticket.customer.disabilityPresented}">
-                        <span style="color:#4ade80;">&#10003; Sí (50% desc.)</span>
+                        <span style="color:#4ade80;">Sí (50% desc.)</span>
                     </c:when>
                     <c:otherwise>No</c:otherwise>
                 </c:choose>
@@ -132,48 +132,48 @@
             <span style="color:#3b82f6;font-weight:700;">&#x23F1; ${ticket.stayDuration}</span>
         </div>
 
-        <h3 style="margin-top:22px;">&#x1F4B0; Tarifas (${ticket.vehicle.vehicleTypeDesc})</h3>
+        <h3 style="margin-top:22px;">Tarifas (${ticket.vehicle.vehicleTypeDesc})</h3>
         <c:if test="${rate != null}">
             <div class="rate-mini-grid">
                 <div class="rate-mini-row">
                     <span>Media hora</span>
                     <button type="button" class="btn-set-amount" onclick="setAmount(${rate.halfHour})">
-                        &#x20A1;<fmt:formatNumber value="${rate.halfHour}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
+                        CRC <fmt:formatNumber value="${rate.halfHour}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
                     </button>
                 </div>
                 <div class="rate-mini-row">
                     <span>1 Hora</span>
                     <button type="button" class="btn-set-amount" onclick="setAmount(${rate.hour})">
-                        &#x20A1;<fmt:formatNumber value="${rate.hour}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
+                        CRC <fmt:formatNumber value="${rate.hour}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
                     </button>
                 </div>
                 <div class="rate-mini-row">
                     <span>Día</span>
                     <button type="button" class="btn-set-amount" onclick="setAmount(${rate.day})">
-                        &#x20A1;<fmt:formatNumber value="${rate.day}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
+                        CRC <fmt:formatNumber value="${rate.day}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
                     </button>
                 </div>
                 <div class="rate-mini-row">
                     <span>Semana</span>
                     <button type="button" class="btn-set-amount" onclick="setAmount(${rate.week})">
-                        &#x20A1;<fmt:formatNumber value="${rate.week}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
+                        CRC <fmt:formatNumber value="${rate.week}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
                     </button>
                 </div>
                 <div class="rate-mini-row">
                     <span>Mes</span>
                     <button type="button" class="btn-set-amount" onclick="setAmount(${rate.month})">
-                        &#x20A1;<fmt:formatNumber value="${rate.month}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
+                        CRC <fmt:formatNumber value="${rate.month}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
                     </button>
                 </div>
                 <div class="rate-mini-row">
                     <span>Año</span>
                     <button type="button" class="btn-set-amount" onclick="setAmount(${rate.year})">
-                        &#x20A1;<fmt:formatNumber value="${rate.year}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
+                        CRC <fmt:formatNumber value="${rate.year}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
                     </button>
                 </div>
             </div>
             <p style="font-size:.75rem;color:var(--text-muted);margin-top:8px;">
-                &#x1F447; Haga clic en una tarifa para aplicarla, o escriba el monto manualmente abajo.
+                Haga clic en una tarifa para aplicarla, o escriba el monto manualmente abajo.
             </p>
         </c:if>
 
@@ -181,7 +181,7 @@
             <div class="lbl">Monto Total a Cobrar</div>
             <div class="amount-calculated">
                 Calculado automáticamente:
-                <strong>&#x20A1;<span id="calculatedDisplay">
+                <strong>CRC <span id="calculatedDisplay">
                     <fmt:formatNumber value="${totalAmount}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
                 </span></strong>
                 <c:if test="${ticket.customer.disabilityPresented}">
@@ -189,7 +189,7 @@
                 </c:if>
             </div>
             <div class="amount-input-row">
-                <span class="currency">&#x20A1;</span>
+                <span class="currency">CRC </span>
                 <input type="number" id="montoEditable" step="0.01" min="0"
                        value="${totalAmount}" oninput="syncMonto(this.value)"
                        title="Puede editar el monto manualmente"/>
@@ -211,10 +211,10 @@
 
 <div class="actions-bar no-print">
     <button onclick="window.print()" class="btn-entrada">
-        &#x1F5A8; Imprimir Vista Previa
+        Imprimir Vista Previa
     </button>
     <button type="button" class="btn-salida" onclick="confirmarPago()">
-        &#x2705; Confirmar Pago y Liberar Espacio
+        Confirmar Pago y Liberar Espacio
     </button>
     <a href="tickets" class="cancel">Cancelar</a>
 </div>

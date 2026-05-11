@@ -38,15 +38,36 @@ public class TicketController extends HttpServlet {
         if ("viewEntry".equals(action)) {
             try {
                 int ticketId = Integer.parseInt(request.getParameter("ticketId"));
+
+                // plate, lotId y slot son opcionales: el redirect desde AssignmentController
+                // los incluye, pero se maneja defensivamente por si se llega por otra vía.
                 String plate = request.getParameter("plate");
-                int lotId = Integer.parseInt(request.getParameter("lotId"));
-                int slot = Integer.parseInt(request.getParameter("slot"));
+
+                String slotParam = request.getParameter("slot");
+                int slot = (slotParam != null && !slotParam.isEmpty())
+                        ? Integer.parseInt(slotParam) : 0;
 
                 Ticket ticket = ticketDAO.findById(ticketId);
-                if (ticket == null) ticket = ticketDAO.getActiveTicketDetails(plate);
 
-                VehicleAssignment assignment = assignmentDAO.findActiveAssignmentByPlate(plate);
+                // Fallback: buscar por placa si el ticketId no resolvió el ticket
+                if (ticket == null && plate != null && !plate.isEmpty()) {
+                    ticket = ticketDAO.getActiveTicketDetails(plate);
+                }
+
+                // Resolver placa desde el ticket si no vino en la URL
+                if (plate == null || plate.isEmpty()) {
+                    plate = (ticket != null && ticket.getVehicle() != null)
+                            ? ticket.getVehicle().getPlate() : "";
+                }
+
+                VehicleAssignment assignment = (!plate.isEmpty())
+                        ? assignmentDAO.findActiveAssignmentByPlate(plate) : null;
                 String parkingName = assignment != null ? assignment.getLotName() : "Parqueo";
+
+                // Si slot no vino en la URL, intentar obtenerlo de la asignación activa
+                if (slot == 0 && assignment != null) {
+                    slot = assignment.getAssignedSlot();
+                }
 
                 Rate rate = null;
                 if (ticket != null && ticket.getVehicle() != null) {

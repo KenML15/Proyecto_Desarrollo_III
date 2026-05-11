@@ -135,7 +135,7 @@
     <body>
 
         <div id="titulo">
-            <h2>&#x1F39F; Gestión de Tiquetes</h2>
+            <h2>Gestión de Tiquetes</h2>
         </div>
 
         <%-- ── ALERTAS de resultado ── --%>
@@ -220,7 +220,7 @@
             Mientras tanto, se muestra un mensaje informativo.
         --%>
         <div class="container--tickets">
-            <h3 class="section-title">&#x1F4CB; Historial de Tiquetes</h3>
+            <h3 class="section-title">Historial de Tiquetes</h3>
 
             <c:choose>
                 <c:when test="${not empty tickets}">

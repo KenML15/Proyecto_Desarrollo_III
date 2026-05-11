@@ -1,94 +1,86 @@
-<%-- 
-    Document   : parking_board_view
-    Created on : 9 may 2026, 6:03:35?p.m.
-    Author     : Kenneth
---%>
-
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" href="CSS/style.css">
-        <title>Tablero de Control</title>
-        <style>
-            .grid-container {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-                gap: 15px;
-                padding: 20px;
-            }
-            .space-card {
-                height: 100px;
-                border-radius: 8px;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                font-weight: bold;
-                color: white;
-                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            }
-            .occupied {
-                background-color: #e74c3c;
-            } /* Rojo */
-            .available {
-                background-color: #2ecc71;
-            } /* Verde */
-            .plate-label {
-                font-size: 0.8rem;
-                margin-top: 5px;
-                background: rgba(0,0,0,0.2);
-                padding: 2px 5px;
-                border-radius: 3px;
-            }
-        </style>
-    </head>
-    <body>
-        <div id="titulo">
-            <h2>Tablero: ${lotName}</h2>
-        </div>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Tablero de Espacios</title>
+    <link rel="stylesheet" href="CSS/style.css">
+    <style>
+        .board-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 10px 0;
+        }
+        .space-cell {
+            width: 90px;
+            min-height: 80px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: .8rem;
+            font-weight: 600;
+            border: 2px solid transparent;
+            padding: 6px;
+            text-align: center;
+            word-break: break-all;
+        }
+        .space-free     { background: rgba(46,204,113,.15); border-color: #2ecc71; color: #2ecc71; }
+        .space-occupied { background: rgba(231,76,60,.15);  border-color: #e74c3c; color: #e74c3c; }
+        .space-disability { border-style: dashed; }
+        .space-num { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+        .legend { display: flex; gap: 20px; margin-bottom: 20px; font-size: .85rem; align-items: center; }
+        .legend-dot { width: 14px; height: 14px; border-radius: 3px; display: inline-block; margin-right: 6px; }
+        .dot-free     { background: #2ecc71; }
+        .dot-occupied { background: #e74c3c; }
+        .empty-msg { color: var(--text-muted); padding: 30px; text-align: center; }
+    </style>
+</head>
+<body>
 
-        <div class="container">
-            <div class="grid-container">
-                <c:forEach var="s" items="${spaces}">
-                    <%-- LÛgica de clases CSS --%>
-                    <c:set var="cardClass" value="" />
-                    <c:choose>
-                        <%-- 1. PRIORIDAD: øEst· ocupado? (ROJO) --%>
-                        <c:when test="${s.occupied}">
-                            <c:set var="cardClass" value="occupied" />
-                            <c:set var="statusText" value="${s.plate}" />
-                        </c:when>
+<div id="titulo">
+    <h2>Tablero ‚Äî ${not empty lotName ? lotName : lot.name}</h2>
+</div>
 
-                        <%-- 2. øEs de discapacidad y est· LIBRE? (AZUL) --%>
-                        <c:when test="${s.disability}">
-                            <c:set var="cardClass" value="available-disability" />
-                            <c:set var="statusText" value="DISCAPACIDAD" />
-                        </c:when>
+<div class="container container--wide">
 
-                        <%-- 3. Caso por defecto: LIBRE REGULAR (VERDE) --%>
-                        <c:otherwise>
-                            <c:set var="cardClass" value="available" />
-                            <c:set var="statusText" value="LIBRE" />
-                        </c:otherwise>
-                    </c:choose>
+    <div class="legend">
+        <span><span class="legend-dot dot-free"></span>Libre</span>
+        <span><span class="legend-dot dot-occupied"></span>Ocupado</span>
+        <span style="color:var(--text-muted); font-size:.8rem;">Borde discontinuo = discapacidad</span>
+    </div>
 
-                    <div class="space-card ${cardClass}">
-                        <span>#${s.number}</span>
-                        <c:if test="${s.disability && !s.occupied}">
-                            <span style="font-size: 20px;">?</span>
-                        </c:if>
-                        <div class="plate-label">
-                            <c:out value="${s.occupied ? s.plate : 'LIBRE'}" />
-                        </div>
+    <c:choose>
+        <c:when test="${not empty boardSpaces}">
+            <div class="board-grid">
+                <c:forEach var="s" items="${boardSpaces}">
+                    <div class="space-cell
+                        ${s.occupied ? 'space-occupied' : 'space-free'}
+                        ${s.disability ? 'space-disability' : ''}">
+                        <span class="space-num">#${s.number}</span>
+                        <c:choose>
+                            <c:when test="${s.occupied}"><span>${s.plate}</span></c:when>
+                            <c:when test="${s.disability}"><span>Disc.</span></c:when>
+                            <c:otherwise><span>Libre</span></c:otherwise>
+                        </c:choose>
                     </div>
                 </c:forEach>
             </div>
+        </c:when>
+        <c:otherwise>
+            <p class="empty-msg">Este parqueo no tiene espacios configurados todav√≠a.<br>
+                <a href="assignments?action=manageSlots&id=${lot.id}" class="save btn-table" style="margin-top:12px; display:inline-block;">Configurar Espacios</a>
+            </p>
+        </c:otherwise>
+    </c:choose>
+</div>
 
-            <div style="margin-top: 20px; text-align: center;">
-                <a href="assignments?action=dashboard" class="cancel">Volver al Reporte General</a>
-            </div>
-        </div>
-    </body>
+<div class="footer-nav">
+    <a href="assignments?action=dashboard" class="cancel">‚Üê Volver al Panel</a>
+</div>
+
+</body>
 </html>

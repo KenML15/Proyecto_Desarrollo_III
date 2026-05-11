@@ -23,7 +23,7 @@
             <img src="IMG/logo.png" alt="Logo" class="logo">
             <div id="titulo">
                 <h2>Panel de Administrador</h2>
-                <p class="role-badge role-admin">&#x1F6E1; Administrador: ${sessionScope.username}</p>
+                <p class="role-badge role-admin">Administrador: ${sessionScope.username}</p>
             </div>
         </div>
 
@@ -35,7 +35,6 @@
 
         <div class="menu-container">
 
-            <!-- SECCIÓN: Registros (compartida con clerk) -->
             <div class="menu-section">
                 <h3> Registros</h3>
                 <div class="grid-menu">
@@ -45,6 +44,11 @@
                     <a href="vehicles?action=add" class="menu-card">
                         <span class="label">Insertar Vehículo</span>
                     </a>
+                    
+                    <a href="vehicles?action=prepareAssign" class="menu-card">
+                        <span class="label">Vincular Dueño a Vehículo</span>
+                    </a>
+
                     <a href="assignments?action=prepare" class="menu-card">
                         <span class="label">Ingresar Vehículo a Parqueo</span>
                     </a>
@@ -60,7 +64,6 @@
                 </div>
             </div>
 
-            <!-- SECCIÓN: Administración (solo admin) -->
             <div class="menu-section menu-section-admin">
                 <h3> Administración (Solo Admin)</h3>
                 <div class="grid-menu">
@@ -70,27 +73,42 @@
                     <a href="parkingLot" class="menu-card menu-card-admin">
                         <span class="label">Gestionar Parqueos</span>
                     </a>
-                    <!-- nuevo -->
                     <a href="vehicleTypes" class="menu-card menu-card-admin">
                         <span class="label">Tipos de Vehículo y Tarifas</span>
                     </a>
                     <a href="show_all_parkingslots" class="menu-card menu-card-admin">
                         <span class="label">Ver Todos los Espacios</span>
                     </a>
-                    <a href="manage_slots" class="menu-card menu-card-admin">
+                    <a href="manage_slots.jsp" class="menu-card menu-card-admin">
                         <span class="label">Administrar Slots</span>
                     </a>
-                    <!-- nuevo -->
                     <a href="tickets?action=list" class="menu-card menu-card-admin">
                         <span class="label">Historial de Tiquetes</span>
                     </a>
                     <a href="reports_menu.jsp" class="menu-card menu-card-admin">
-                        <span class="label">&#x1F4CA; Reportes PDF</span>
+                        <span class="label">Reportes PDF</span>
+                    </a>
+                    <a href="users?action=add" class="menu-card menu-card-admin">
+                        <span class="label">Crear Usuario</span>
+                    </a>
+                    <a href="users" class="menu-card menu-card-admin">
+                        <span class="label">Gestionar Usuarios</span>
                     </a>
                 </div>
             </div>
 
         </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('msg') === 'assigned') {
+                Swal.fire('¡Éxito!', 'Dueño vinculado correctamente', 'success');
+            }
+            if (urlParams.get('msg') === 'created') {
+                Swal.fire('¡Éxito!', 'Vehículo registrado', 'success');
+            }
+        </script>
 
         <div class="logout-container">
             <a href="logout" class="btn-logout">Cerrar Sesión</a>

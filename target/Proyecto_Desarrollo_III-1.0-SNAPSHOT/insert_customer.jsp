@@ -6,53 +6,40 @@
         <title>Ingreso de Clientes</title>
         <link rel="stylesheet" href="CSS/style.css"/>
     </head>
-    <%-- data-menu indica a qué menú regresa el confirmYes() según el rol --%>
     <body data-menu="${sessionScope.role == 'admin' ? 'menu_admin.jsp' : 'menu_clerk.jsp'}">
 
-        <div id="titulo">
-            <h2>Gestión de Clientes</h2>
-        </div>
+        <div id="titulo"><h2>Gestión de Clientes</h2></div>
 
         <div class="container">
             <h2>Formulario de registro</h2>
             <form action="customers" method="post">
-
                 <input type="hidden" name="action" value="insertar">
-
                 <label>Nombre Completo</label>
                 <input type="text" name="name" required placeholder="Ej: Kenneth Miranda">
-
                 <label>Cédula</label>
                 <input type="text" name="cedula" placeholder="Ej: 1-2345-6789">
-
                 <label>Teléfono</label>
                 <input type="text" name="telefono" placeholder="Ej: 8888-8888">
-
                 <label>Correo Electrónico</label>
                 <input type="text" name="correo" placeholder="Ej: cliente@correo.com">
-
                 <div class="checkbox-row">
                     <input type="checkbox" name="discapacity" id="discapacity">
-                    <label for="discapacity" class="checkbox-label">
-                        ¿El cliente presenta alguna discapacidad?
-                    </label>
+                    <label for="discapacity" class="checkbox-label">¿El cliente presenta alguna discapacidad?</label>
                 </div>
-
                 <div class="buttons">
                     <button type="submit" class="save">Guardar cliente</button>
-                    <%-- Cancelar abre el modal JS en lugar de redirigir directo --%>
                     <button type="button" class="cancel" onclick="cancelar()">Cancelar</button>
                 </div>
             </form>
         </div>
 
-        <%-- Modal de confirmación de cancelación (patrón Lab02) --%>
         <div id="confirmBox" class="confirm-box">
             <div class="confirm-content">
+                
                 <p>¿Desea cancelar el registro del cliente?</p>
                 <div class="confirm-buttons">
-                    <button class="btn yes" onclick="confirmYes()">Sí</button>
-                    <button class="btn no"  onclick="confirmNo()">No</button>
+                    <button class="btn-modal yes" onclick="confirmYes()">Sí</button>
+                    <button class="btn-modal no"  onclick="confirmNo()">No</button>
                 </div>
             </div>
         </div>

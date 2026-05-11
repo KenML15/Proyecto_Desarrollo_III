@@ -19,6 +19,7 @@
             gap: 28px;
             width: 100%;
             max-width: 1000px;
+            margin: 0 auto;
         }
         @media (max-width: 720px) { .page-grid { grid-template-columns: 1fr; } }
 
@@ -98,8 +99,8 @@
 <div class="header-container">
     <img src="IMG/logo.png" alt="Logo" class="logo">
     <div id="titulo">
-        <h2>&#x1F697; Tipos de Vehículo y Tarifas</h2>
-        <p class="role-badge role-admin">&#x1F6E1; Administrador: ${sessionScope.username}</p>
+        <h2>Tipos de Vehículo y Tarifas</h2>
+        <p class="role-badge role-admin">Administrador: ${sessionScope.username}</p>
     </div>
 </div>
 
@@ -129,12 +130,12 @@
                     <span class="type-name">${vt.description}</span>
                     <div class="type-actions">
                         <a href="vehicleTypes?action=editType&id=${vt.idVehicleType}" class="btn-edit">&#x270F; Editar</a>
-                        <a href="vehicleTypes?action=editRate&id=${vt.idVehicleType}" class="btn-rate">&#x1F4B0; Tarifa</a>
+                        <a href="vehicleTypes?action=editRate&id=${vt.idVehicleType}" class="btn-rate">Tarifa</a>
                         <form action="vehicleTypes" method="post" style="display:inline;"
                               onsubmit="return confirm('¿Eliminar el tipo «${vt.description}»? Solo es posible si no tiene vehículos ni tarifas asociados.')">
                             <input type="hidden" name="action" value="deleteType"/>
                             <input type="hidden" name="idVehicleType" value="${vt.idVehicleType}"/>
-                            <button type="submit" class="btn-del">&#x1F5D1;</button>
+                            <button type="submit" class="btn-del">Eliminar</button>
                         </form>
                     </div>
                 </li>
@@ -147,7 +148,7 @@
 
     <%-- ── RIGHT: rates table ── --%>
     <div class="panel">
-        <h3>&#x1F4CB; Tarifas Configuradas</h3>
+        <h3>Tarifas Configuradas</h3>
         <table class="rates-table">
             <thead>
                 <tr>
