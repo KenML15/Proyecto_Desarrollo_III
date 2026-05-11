@@ -42,31 +42,30 @@ public class AssignmentDAO {
         }
     }
 
-public boolean insert(String plate, int idLot, int slotNumber) {
-    // Cambiamos 'slot_number' por 'assigned_slot' que es el nombre real en tu tabla
-    String sql = "INSERT INTO vehicle_assignment (plate_vehicle, id_parking_lot, assigned_slot, entry_time) VALUES (?, ?, ?, NOW())";
-    
-    try (Connection conn = DbConnection.getConnection();
-         PreparedStatement ps = conn.prepareStatement(sql)) {
-        
-        ps.setString(1, plate);
-        ps.setInt(2, idLot);
-        ps.setInt(3, slotNumber);
-        
-        // Ejecutamos la inserción
-        int result = ps.executeUpdate();
-        return result > 0;
-        
-    }  catch (SQLException e) {
-    System.out.println("------ ERROR DE CAPA DE DATOS ------");
-    System.out.println("Mensaje: " + e.getMessage());
-    System.out.println("Estado SQL: " + e.getSQLState());
-    System.out.println("Código de Error: " + e.getErrorCode());
-    e.printStackTrace();
-    return false;
+    public boolean insert(String plate, int idLot, int slotNumber) {
+        // Cambiamos 'slot_number' por 'assigned_slot' que es el nombre real en tu tabla
+        String sql = "INSERT INTO vehicle_assignment (plate_vehicle, id_parking_lot, assigned_slot, entry_time) VALUES (?, ?, ?, NOW())";
 
+        try (Connection conn = DbConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, plate);
+            ps.setInt(2, idLot);
+            ps.setInt(3, slotNumber);
+
+            // Ejecutamos la inserción
+            int result = ps.executeUpdate();
+            return result > 0;
+
+        } catch (SQLException e) {
+            System.out.println("------ ERROR DE CAPA DE DATOS ------");
+            System.out.println("Mensaje: " + e.getMessage());
+            System.out.println("Estado SQL: " + e.getSQLState());
+            System.out.println("Código de Error: " + e.getErrorCode());
+            e.printStackTrace();
+            return false;
+
+        }
     }
-}
 
     public List<VehicleAssignment> findActiveAssignments() {
         List<VehicleAssignment> list = new ArrayList<>();
@@ -122,16 +121,22 @@ public boolean insert(String plate, int idLot, int slotNumber) {
         return list;
     }
 
-    public boolean releaseVehicle(int assignmentId) {
+    public void releaseVehicle(int id) {
+        // Fíjate bien en el nombre de la tabla: 'vehicle_assignment'
+        String sql = "UPDATE vehicle_assignment SET status = 'INACTIVE' WHERE id = ?";
 
-        String sql = "UPDATE vehicle_assignment SET status = 'INACTIVE' WHERE id = ? AND status = 'ACTIVE'";
-        try (Connection conn = DbConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DbConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            pstmt.setInt(1, assignmentId);
-            int rows = pstmt.executeUpdate();
-            return rows > 0;
+            ps.setInt(1, id);
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println(">>> DAO: Salida registrada con éxito para ID: " + id);
+            } else {
+                System.out.println(">>> DAO: No se encontró el ID " + id + " para marcar como INACTIVE");
+            }
         } catch (SQLException e) {
-            return false;
+            System.err.println(">>> DAO ERROR: " + e.getMessage());
         }
     }
 
@@ -216,24 +221,76 @@ public boolean insert(String plate, int idLot, int slotNumber) {
             return false;
         }
     }
-    
+
     public boolean saveOrUpdateSlot(int lotId, int slotNumber, boolean isDisability) {
-    // Usamos INSERT ... ON DUPLICATE KEY para evitar errores si el número de espacio ya existe
-    String sql = "INSERT INTO parking_slot (id_parking_lot, slot_number, is_disability_only) " +
-                 "VALUES (?, ?, ?) " +
-                 "ON DUPLICATE KEY UPDATE is_disability_only = ?";
-    try (Connection conn = DbConnection.getConnection(); 
-         PreparedStatement pstmt = conn.prepareStatement(sql)) {
-        
-        pstmt.setInt(1, lotId);
-        pstmt.setInt(2, slotNumber);
-        pstmt.setBoolean(3, isDisability);
-        pstmt.setBoolean(4, isDisability);
-        
-        return pstmt.executeUpdate() > 0;
-    } catch (SQLException e) {
-        e.printStackTrace();
+        // Usamos INSERT ... ON DUPLICATE KEY para evitar errores si el número de espacio ya existe
+        String sql = "INSERT INTO parking_slot (id_parking_lot, slot_number, is_disability_only) "
+                + "VALUES (?, ?, ?) "
+                + "ON DUPLICATE KEY UPDATE is_disability_only = ?";
+        try (Connection conn = DbConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, lotId);
+            pstmt.setInt(2, slotNumber);
+            pstmt.setBoolean(3, isDisability);
+            pstmt.setBoolean(4, isDisability);
+
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean isVehicleAlreadyParked(String plate) {
+        String sql = "SELECT COUNT(*) FROM vehicle_assignment WHERE plate_vehicle = ? AND status = 'ACTIVE'";
+        try (Connection conn = DbConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, plate);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
-}
+
+    public boolean isSlotOccupied(int idLot, int slot) {
+        String sql = "SELECT COUNT(*) FROM assignment WHERE id_parking_lot = ? AND assigned_slot = ? AND status = 'active'";
+        try (Connection conn = DbConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idLot);
+            ps.setInt(2, slot);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public int findFirstAvailableSlot(int idLot, boolean isDisabilityUser) {
+        int slotNumber = -1;
+
+        // Nombres corregidos según tu imagen:
+        // slot_number, is_disability_only, is_occupied
+        String sql = isDisabilityUser
+                ? "SELECT slot_number FROM parking_slot WHERE id_parking_lot = ? AND is_occupied = 0 ORDER BY is_disability_only DESC, slot_number ASC LIMIT 1"
+                : "SELECT slot_number FROM parking_slot WHERE id_parking_lot = ? AND is_occupied = 0 AND is_disability_only = 0 ORDER BY slot_number ASC LIMIT 1";
+
+        try (Connection conn = DbConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idLot);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                slotNumber = rs.getInt("slot_number"); // Cambiado aquí también
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return slotNumber;
+    }
 }

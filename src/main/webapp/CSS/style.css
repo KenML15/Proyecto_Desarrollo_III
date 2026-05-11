@@ -652,3 +652,17 @@ input[type="checkbox"] {
     text-align: center;
     font-weight: 500;
 }
+
+.available-disability {
+    background-color: #2980b9 !important; /* Un azul fuerte */
+    border: 2px dashed #ecf0f1;
+    position: relative;
+}
+
+/* Opcional: Un icono de silla de ruedas con texto */
+.available-disability::after {
+    content: "LEY 7600";
+    font-size: 10px;
+    display: block;
+    margin-top: 5px;
+}

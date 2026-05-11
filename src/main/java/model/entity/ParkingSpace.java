@@ -21,6 +21,11 @@ public class ParkingSpace {
         this.plate = plate;
     }
 
+    public ParkingSpace() {
+    }
+    
+    
+
     // Getters y Setters
     public boolean isDisability() {
         return disability;

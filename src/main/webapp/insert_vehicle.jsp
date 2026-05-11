@@ -36,13 +36,6 @@
                     <option value="3">Camión</option>
                 </select>
 
-                <label>Asignar Dueño (Cliente)</label>
-                <select name="idCustomer">
-                    <option value="0">-- Seleccione un cliente --</option>
-                    <c:forEach items="${customers}" var="c">
-                        <option value="${c.id}">${c.name}</option>
-                    </c:forEach>
-                </select>
 
                 <div class="buttons">
                     <input type="submit" value="Guardar vehículo" class="save">

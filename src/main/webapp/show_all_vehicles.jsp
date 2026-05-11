@@ -40,6 +40,7 @@
                             <td><c:out value="${v.color}"/></td>
                             <td>
                                 <c:choose>
+                                    <%-- Si ownerName trae "Juan, Maria", se mostrará aquí --%>
                                     <c:when test="${not empty v.ownerName}">
                                         <c:out value="${v.ownerName}"/>
                                     </c:when>

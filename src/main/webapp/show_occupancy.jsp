@@ -6,6 +6,7 @@
         <meta charset="UTF-8">
         <link rel="stylesheet" href="CSS/style.css">
         <title>Ocupación en Tiempo Real</title>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     <body>
 
@@ -47,7 +48,6 @@
                                 <span class="badge-parked">PARQUEADO</span>
                             </td>
                             <td>
-                                <%-- Modal JS en lugar de confirm() nativo --%>
                                 <button class="cancel btn-table"
                                         onclick="confirmarSalida('${pageContext.request.contextPath}/assignments?action=release&id=${a.id}', '${a.plateVehicle}')">
                                     Registrar Salida
@@ -71,16 +71,7 @@
             </c:choose>
         </div>
 
-        <%-- Modal de confirmación de salida de vehículo --%>
-        <div id="releaseBox" class="confirm-box">
-            <div class="confirm-content">
-                <p>¿Confirmar salida del vehículo <strong><span id="releasePlaca"></span></strong>?</p>
-                <div class="confirm-buttons">
-                    <button class="btn yes" onclick="releaseYes()">Sí, registrar salida</button>
-                    <button class="btn no"  onclick="releaseNo()">Cancelar</button>
-                </div>
-            </div>
-        </div>
+
 
         <script src="js/Assignment.js"></script>
     </body>

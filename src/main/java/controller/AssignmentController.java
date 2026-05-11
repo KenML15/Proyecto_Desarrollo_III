@@ -61,12 +61,17 @@ public class AssignmentController extends HttpServlet {
         // --- 3. LIBERAR VEHÍCULO (Acción desde enlace) ---
         if ("release".equalsIgnoreCase(action)) {
             try {
-                int id = Integer.parseInt(request.getParameter("id"));
-                assignmentDAO.releaseVehicle(id);
+                String idStr = request.getParameter("id");
+                if (idStr != null) {
+                    int id = Integer.parseInt(idStr);
+                    assignmentDAO.releaseVehicle(id);
+                    // Redirigir con un timestamp para forzar al navegador a recargar la tabla
+                    response.sendRedirect("assignments?action=list&msg=success&t=" + System.currentTimeMillis());
+                }
             } catch (Exception e) {
                 e.printStackTrace();
+                response.sendRedirect("assignments?action=list&error=db");
             }
-            response.sendRedirect("assignments?action=list&nocache=" + System.currentTimeMillis());
             return;
         }
 
@@ -77,7 +82,6 @@ public class AssignmentController extends HttpServlet {
             request.getRequestDispatcher("parking_dashboard.jsp").forward(request, response);
             return;
         }
-
 
         if ("board".equalsIgnoreCase(action)) {
             try {
@@ -97,7 +101,12 @@ public class AssignmentController extends HttpServlet {
             if (idStr != null) {
                 try {
                     int lotId = Integer.parseInt(idStr);
+
+                    // --- NUEVO: Obtener el objeto ParkingLot completo ---
+                    ParkingLot lot = parkingDAO.findById(lotId);
                     List<ParkingSpace> currentSlots = assignmentDAO.getBoardByParkingLot(lotId);
+
+                    request.setAttribute("lot", lot); // Pasamos el objeto con su capacidad
                     request.setAttribute("lotId", lotId);
                     request.setAttribute("currentSlots", currentSlots);
                     request.getRequestDispatcher("manage_slots.jsp").forward(request, response);
@@ -107,7 +116,6 @@ public class AssignmentController extends HttpServlet {
                 return;
             }
         }
-
 
         response.sendRedirect("main_menu.html");
     }
@@ -119,22 +127,29 @@ public class AssignmentController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
 
+        // 1. Guardar o actualizar espacios (Slots)
         if ("saveSlot".equalsIgnoreCase(action)) {
-            try {
-                int idLot = Integer.parseInt(request.getParameter("idParkingLot"));
-                int slotNumber = Integer.parseInt(request.getParameter("slotNumber"));
-                boolean isDisability = request.getParameter("isDisability") != null;
+    try {
+        int idLot = Integer.parseInt(request.getParameter("idParkingLot"));
+        int slotNumber = Integer.parseInt(request.getParameter("slotNumber"));
+        boolean isDisability = request.getParameter("isDisability") != null;
 
-                parkingDAO.saveOrUpdateSlot(idLot, slotNumber, isDisability);
-                
-
-                response.sendRedirect("assignments?action=manageSlots&id=" + idLot);
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.sendRedirect("assignments?action=dashboard&error=save");
-            }
+        // --- VALIDACIÓN DE SEGURIDAD ---
+        ParkingLot lot = parkingDAO.findById(idLot);
+        if (slotNumber > lot.getNumberOfSpaces()) {
+            // Si el espacio supera la capacidad física, devolvemos error
+            response.sendRedirect("assignments?action=manageSlots&id=" + idLot + "&error=limit_exceeded");
             return;
         }
+
+        parkingDAO.saveOrUpdateSlot(idLot, slotNumber, isDisability);
+        response.sendRedirect("assignments?action=manageSlots&id=" + idLot);
+    } catch (Exception e) {
+        e.printStackTrace();
+        response.sendRedirect("assignments?action=dashboard&error=save");
+    }
+    return;
+}
 
         String plate = request.getParameter("plateVehicle");
         String lotIdStr = request.getParameter("idParkingLot");
@@ -145,10 +160,37 @@ public class AssignmentController extends HttpServlet {
                 int idLot = Integer.parseInt(lotIdStr);
                 int slotNumber = Integer.parseInt(slotStr);
 
+                // 1. Validar límite físico (Regla #4)
+                ParkingLot lot = parkingDAO.findById(idLot);
+                if (slotNumber > lot.getNumberOfSpaces()) {
+                    response.sendRedirect("assignments?action=prepare&error=slot_out_of_range&max=" + lot.getNumberOfSpaces() + "&slot=" + slotNumber);
+                    return;
+                }
+
+                // --- [NUEVO] REGLA DE NEGOCIO #5: Validar Espacio de Discapacidad ---
+                // Primero obtenemos la información de ese espacio específico
+                ParkingSpace space = parkingDAO.getSlotInfo(idLot, slotNumber);
+
+                // Si el espacio está marcado como exclusivo para discapacidad
+                if (space != null && space.isDisability()) {
+                    // Verificamos si el vehículo tiene al menos un dueño discapacitado
+                    if (!vehicleDAO.hasDisabilityOwner(plate)) {
+                        response.sendRedirect("assignments?action=prepare&error=disability_required&plate=" + plate + "&slot=" + slotNumber);
+                        return;
+                    }
+                }
+
+                // 2. Validar si ya está parqueado (Regla #1 y #2)
+                if (assignmentDAO.isVehicleAlreadyParked(plate)) {
+                    response.sendRedirect("assignments?action=prepare&error=already_parked&plate=" + plate);
+                    return;
+                }
+
+                // 3. Validar capacidad general e insertar
                 if (assignmentDAO.hasCapacity(idLot)) {
                     boolean success = assignmentDAO.insert(plate, idLot, slotNumber);
                     if (success) {
-                        response.sendRedirect("main_menu.html?msg=success");
+                        response.sendRedirect("menu_admin.jsp?msg=success");
                     } else {
                         response.sendRedirect("assignments?action=prepare&error=db");
                     }
@@ -161,7 +203,5 @@ public class AssignmentController extends HttpServlet {
             }
             return;
         }
-
-        response.sendRedirect("main_menu.html");
     }
 }
