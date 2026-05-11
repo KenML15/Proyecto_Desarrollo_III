@@ -5,49 +5,45 @@
     <head>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="CSS/style.css">
-        <title>Asignar Vehículo | Registro Inteligente</title>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <title>Asignar Vehículo a Parqueo</title>
     </head>
     <body data-menu="${sessionScope.role == 'admin' ? 'menu_admin.jsp' : 'menu_clerk.jsp'}">
 
-        <div class="container">
-            <div id="titulo">
-                <h2>Registrar Ingreso de Vehículo</h2>
-                <p style="text-align: center; color: #718096; font-size: 0.9em;">
-                    El sistema asignará automáticamente el espacio disponible.
-                </p>
-            </div>
+        <div id="titulo"><h2>Registrar Ingreso de Vehículo</h2></div>
 
-            <form action="assignments" method="POST" class="form" id="parkingForm">
-                <label>SELECCIONAR VEHÍCULO (PLACA):</label>
-                <select name="plateVehicle" id="plateVehicle" required>
+        <div class="container">
+            <form action="assignments" method="POST" class="form">
+                <label>Seleccionar Vehículo (Placa)</label>
+                <select name="plateVehicle" required>
                     <option value="">-- Seleccione un vehículo --</option>
                     <c:forEach var="v" items="${vehicles}">
                         <option value="${v.plate}">${v.plate} - ${v.brand} ${v.model}</option>
                     </c:forEach>
                 </select>
-
-                <label>SELECCIONAR PARQUEO / LOTE:</label>
-                <select name="idParkingLot" id="idParkingLot" required>
+                <label>Seleccionar Parqueo / Lote</label>
+                <select name="idParkingLot" required>
                     <option value="">-- Seleccione el área de destino --</option>
                     <c:forEach var="p" items="${parkingLots}">
-                        <option value="${p.id}">${p.name}</option>
+                        <option value="${p.id}">${p.name} (Capacidad: ${p.numberOfSpaces})</option>
                     </c:forEach>
                 </select>
-
-                <div class="botones" style="margin-top: 20px;">
+                <label>Número de Espacio (Slot)</label>
+                <input type="number" name="assignedSlot" placeholder="Ej: 1" required min="1">
+                <div class="buttons">
                     <button type="submit" class="save">Registrar Ingreso</button>
-                    <button type="button" class="cancel" id="btnCancelar">Cancelar</button>
+                    <button type="button" class="cancel" onclick="cancelar()">Cancelar</button>
                 </div>
             </form>
         </div>
 
-        <div id="confirmBox" class="confirm-box" style="display: none;">
+        <!-- Modal de confirmación (patrón Lab02 + estilos del proyecto) -->
+        <div id="confirmBox" class="confirm-box">
             <div class="confirm-content">
+                <span class="modal-icon">🚪</span>
                 <p>¿Desea cancelar el registro de ingreso?</p>
                 <div class="confirm-buttons">
-                    <button class="btn yes" id="confirmYes">Sí</button>
-                    <button class="btn no"  id="confirmNo">No</button>
+                    <button class="btn-modal yes" onclick="confirmYes()">Sí</button>
+                    <button class="btn-modal no"  onclick="confirmNo()">No</button>
                 </div>
             </div>
         </div>

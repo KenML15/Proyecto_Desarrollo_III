@@ -6,7 +6,6 @@
         <meta charset="UTF-8">
         <link rel="stylesheet" href="CSS/style.css">
         <title>Ocupación en Tiempo Real</title>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     <body>
 
@@ -21,10 +20,10 @@
             </c:choose>
         </div>
 
-        <%-- Buscador en tiempo real (patrón Lab02) --%>
-        <div class="container">
-            <label for="search">Buscar vehículo:</label>
-            <input type="text" id="search" class="input" placeholder="Placa, parqueo...">
+        <!-- Buscador en tiempo real (patrón Lab02 + clases del proyecto) -->
+        <div class="search-wrapper">
+            <label for="search">Buscar vehículo</label>
+            <input type="text" id="search" class="input-search" placeholder="Placa, parqueo...">
         </div>
 
         <div class="container container--wide">
@@ -48,6 +47,7 @@
                                 <span class="badge-parked">PARQUEADO</span>
                             </td>
                             <td>
+                                <%-- Modal JS en lugar de confirm() nativo --%>
                                 <button class="cancel btn-table"
                                         onclick="confirmarSalida('${pageContext.request.contextPath}/assignments?action=release&id=${a.id}', '${a.plateVehicle}')">
                                     Registrar Salida
@@ -57,8 +57,9 @@
                     </c:forEach>
                 </tbody>
             </table>
+        </div>
 
-            <br>
+        <div class="footer-nav footer-nav--lg">
             <c:choose>
                 <c:when test="${not empty lotId}">
                     <a href="parkingLot" class="cancel">← Volver a Gestionar Parqueos</a>
@@ -71,7 +72,17 @@
             </c:choose>
         </div>
 
-
+        <!-- Modal de confirmación de salida de vehículo -->
+        <div id="releaseBox" class="confirm-box">
+            <div class="confirm-content">
+                <span class="modal-icon">🚗💨</span>
+                <p>¿Confirmar salida del vehículo <strong><span id="releasePlaca"></span></strong>?</p>
+                <div class="confirm-buttons">
+                    <button class="btn-modal yes-danger" onclick="releaseYes()">Sí, registrar salida</button>
+                    <button class="btn-modal no"         onclick="releaseNo()">Cancelar</button>
+                </div>
+            </div>
+        </div>
 
         <script src="js/Assignment.js"></script>
     </body>

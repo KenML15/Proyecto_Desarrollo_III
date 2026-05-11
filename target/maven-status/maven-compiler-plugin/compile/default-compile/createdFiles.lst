@@ -2,6 +2,7 @@ controller\ParkingLotController.class
 controller\AssignmentController.class
 model\entity\Vehicle.class
 model\dao\SpaceDAO.class
+controller\UserController.class
 model\dao\VehicleTypeDAO.class
 model\entity\ParkingLot.class
 model\entity\VehicleAssignment.class
@@ -11,6 +12,7 @@ model\entity\ParkingSpace.class
 controller\VehicleController.class
 model\dao\RateDAO.class
 model\entity\JakartaEE8Resource.class
+model\entity\User.class
 controller\RoleFilter.class
 Pruebas\main.class
 model\entity\Ticket.class

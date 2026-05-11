@@ -1,10 +1,4 @@
-/**
- * Customer.js
- * Funciones JavaScript para las vistas de Clientes.
- * Metodología: modal de confirmación + búsqueda en tiempo real (keyup).
- */
 
-// ── Modal de cancelación ──────────────────────────────────────────────────────
 
 function cancelar() {
     document.getElementById("confirmBox").style.display = "flex";
@@ -20,7 +14,6 @@ function confirmNo() {
     document.getElementById("confirmBox").style.display = "none";
 }
 
-// ── Modal de eliminación ──────────────────────────────────────────────────────
 
 var deleteUrl = "";
 
@@ -38,7 +31,6 @@ function deleteNo() {
     document.getElementById("deleteBox").style.display = "none";
 }
 
-// ── Búsqueda en tiempo real (keyup) ──────────────────────────────────────────
 
 var searchInput = document.getElementById("search");
 if (searchInput) {

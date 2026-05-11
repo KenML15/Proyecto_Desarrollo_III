@@ -45,7 +45,7 @@
                         <span class="label">Insertar Vehículo</span>
                     </a>
                     
-                    <a href="vehicles?action=prepareAssign" class="menu-card" style="border-left: 5px solid #2ecc71;">
+                    <a href="vehicles?action=prepareAssign" class="menu-card">
                         <span class="label">Vincular Dueño a Vehículo</span>
                     </a>
 
@@ -73,11 +73,17 @@
                     <a href="parkingLot" class="menu-card menu-card-admin">
                         <span class="label">Gestionar Parqueos</span>
                     </a>
-                    <a href="show_all_parkingslots" class="menu-card menu-card-admin">
+                    <a href="parking_board_view.jsp" class="menu-card menu-card-admin">
                         <span class="label">Ver Todos los Espacios</span>
                     </a>
-                    <a href="manage_slots" class="menu-card menu-card-admin">
+                    <a href="manage_slots.jsp" class="menu-card menu-card-admin">
                         <span class="label">Administrar Slots</span>
+                    </a>
+                    <a href="users?action=add" class="menu-card menu-card-admin">
+                        <span class="label">Crear Usuario</span>
+                    </a>
+                    <a href="users" class="menu-card menu-card-admin">
+                        <span class="label">Gestionar Usuarios</span>
                     </a>
                 </div>
             </div>

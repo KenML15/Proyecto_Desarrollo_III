@@ -1,94 +1,83 @@
-<%-- 
-    Document   : parking_board_view
-    Created on : 9 may 2026, 6:03:35?p.m.
-    Author     : Kenneth
---%>
-
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt"  prefix="fmt" %>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" href="CSS/style.css">
-        <title>Tablero de Control</title>
-        <style>
-            .grid-container {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-                gap: 15px;
-                padding: 20px;
-            }
-            .space-card {
-                height: 100px;
-                border-radius: 8px;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                font-weight: bold;
-                color: white;
-                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            }
-            .occupied {
-                background-color: #e74c3c;
-            } /* Rojo */
-            .available {
-                background-color: #2ecc71;
-            } /* Verde */
-            .plate-label {
-                font-size: 0.8rem;
-                margin-top: 5px;
-                background: rgba(0,0,0,0.2);
-                padding: 2px 5px;
-                border-radius: 3px;
-            }
-        </style>
+        <title>Dashboard de Espacios</title>
     </head>
     <body>
+
         <div id="titulo">
-            <h2>Tablero: ${lotName}</h2>
+            <h2>Estado de Espacios por Parqueo</h2>
         </div>
 
-        <div class="container">
-            <div class="grid-container">
-                <c:forEach var="s" items="${spaces}">
-                    <%-- LÛgica de clases CSS --%>
-                    <c:set var="cardClass" value="" />
-                    <c:choose>
-                        <%-- 1. PRIORIDAD: øEst· ocupado? (ROJO) --%>
-                        <c:when test="${s.occupied}">
-                            <c:set var="cardClass" value="occupied" />
-                            <c:set var="statusText" value="${s.plate}" />
-                        </c:when>
-
-                        <%-- 2. øEs de discapacidad y est· LIBRE? (AZUL) --%>
-                        <c:when test="${s.disability}">
-                            <c:set var="cardClass" value="available-disability" />
-                            <c:set var="statusText" value="DISCAPACIDAD" />
-                        </c:when>
-
-                        <%-- 3. Caso por defecto: LIBRE REGULAR (VERDE) --%>
-                        <c:otherwise>
-                            <c:set var="cardClass" value="available" />
-                            <c:set var="statusText" value="LIBRE" />
-                        </c:otherwise>
-                    </c:choose>
-
-                    <div class="space-card ${cardClass}">
-                        <span>#${s.number}</span>
-                        <c:if test="${s.disability && !s.occupied}">
-                            <span style="font-size: 20px;">?</span>
-                        </c:if>
-                        <div class="plate-label">
-                            <c:out value="${s.occupied ? s.plate : 'LIBRE'}" />
-                        </div>
-                    </div>
-                </c:forEach>
-            </div>
-
-            <div style="margin-top: 20px; text-align: center;">
-                <a href="assignments?action=dashboard" class="cancel">Volver al Reporte General</a>
-            </div>
+        <!-- Buscador en tiempo real (patr√≥n Lab02) -->
+        <div class="search-wrapper">
+            <label for="search">Buscar parqueo</label>
+            <input type="text" id="search" class="input-search" placeholder="Nombre del parqueo...">
         </div>
+
+        <div class="container container--wide">
+            <table border="1" id="dashboardTable">
+                <thead>
+                    <tr id="encabezado">
+                        <th>Nombre del Parqueo</th>
+                        <th>Capacidad Total</th>
+                        <th>Ocupados</th>
+                        <th>Disponibles</th>
+                        <th class="th-visual">Estado Visual</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="p" items="${report}">
+                        <c:set var="porcentaje" value="${(p.occupatedSpaces * 100) / p.numberOfSpaces}" />
+                        <tr>
+                            <td><strong><c:out value="${p.name}"/></strong></td>
+                            <td class="td-center"><c:out value="${p.numberOfSpaces}"/></td>
+                            <td class="td-center"><c:out value="${p.occupatedSpaces}"/></td>
+                            <td class="td-center">${p.numberOfSpaces - p.occupatedSpaces}</td>
+                            <td class="td-visual">
+                                <div class="progress-bar">
+                                    <div class="${p.occupatedSpaces >= p.numberOfSpaces
+                                                    ? 'progress-bar__fill progress-bar__fill--full'
+                                                    : 'progress-bar__fill progress-bar__fill--ok'}"
+                                         style="width: ${porcentaje}%;">
+                                    </div>
+                                </div>
+                                <small class="progress-label">
+                                    <fmt:formatNumber value="${porcentaje}" maxFractionDigits="1"/>% ocupado
+                                </small>
+                            </td>
+                            <td>
+                                <a href="assignments?action=board&id=${p.id}&name=${p.name}"
+                                   class="save btn-table btn-table--info">Ver Tablero</a>
+                                <a href="assignments?action=manageSlots&id=${p.id}"
+                                   class="save btn-table">Configurar Espacios</a>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer-nav footer-nav--lg">
+            <a href="${sessionScope.role == 'admin' ? 'menu_admin.jsp' : 'menu_clerk.jsp'}" class="cancel">
+                ‚Üê Volver al Men√∫
+            </a>
+        </div>
+
+        <script>
+            // Buscador en tiempo real
+            document.getElementById("search").addEventListener("keyup", function () {
+                var filter = this.value.toLowerCase();
+                document.querySelectorAll("#dashboardTable tbody tr").forEach(function (row) {
+                    row.style.display = row.textContent.toLowerCase().includes(filter) ? "" : "none";
+                });
+            });
+        </script>
     </body>
 </html>

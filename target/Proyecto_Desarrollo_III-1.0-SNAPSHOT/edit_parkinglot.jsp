@@ -9,22 +9,16 @@
     </head>
     <body data-menu="menu_admin.jsp">
 
-        <div id="titulo">
-            <h2>Modificar Datos del Parqueo</h2>
-        </div>
+        <div id="titulo"><h2>Modificar Datos del Parqueo</h2></div>
 
         <div class="container">
             <form action="parkingLot" method="post">
-
                 <input type="hidden" name="action" value="update">
                 <input type="hidden" name="id" value="${parqueo.id}">
-
                 <label>Nombre del Parqueo</label>
                 <input type="text" name="name" value="${parqueo.name}">
-
                 <label>Cantidad de Espacios</label>
                 <input type="number" name="num_spaces" value="${parqueo.numberOfSpaces}">
-
                 <div class="buttons">
                     <input type="submit" value="Actualizar" class="save">
                     <button type="button" class="cancel" onclick="cancelar()">Cancelar</button>
@@ -32,13 +26,14 @@
             </form>
         </div>
 
-        <%-- Modal de confirmación de cancelación (patrón Lab02) --%>
+        <!-- Modal de confirmación (patrón Lab02 + estilos del proyecto) -->
         <div id="confirmBox" class="confirm-box">
             <div class="confirm-content">
+                <span class="modal-icon">✏️</span>
                 <p>¿Desea cancelar la edición del parqueo?</p>
                 <div class="confirm-buttons">
-                    <button class="btn yes" onclick="confirmYes()">Sí</button>
-                    <button class="btn no"  onclick="confirmNo()">No</button>
+                    <button class="btn-modal yes" onclick="confirmYes()">Sí</button>
+                    <button class="btn-modal no"  onclick="confirmNo()">No</button>
                 </div>
             </div>
         </div>
