@@ -1,22 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model.dao;
 
-/**
- *
- * @author Kenneth
- */
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import model.entity.VehicleType;
 
+
 public class VehicleTypeDAO {
 
-    //create
-    public boolean create(String description) {
+    public boolean insert(String description) {
         String sql = "INSERT INTO vehicle_type (description) VALUES (?)";
         try (Connection conn = DbConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -28,10 +20,9 @@ public class VehicleTypeDAO {
         }
     }
 
-    //read
     public List<VehicleType> readAll() {
         List<VehicleType> list = new ArrayList<>();
-        String sql = "SELECT * FROM vehicle_type";
+        String sql = "SELECT * FROM vehicle_type ORDER BY id_vehicle_type";
         try (Connection conn = DbConnection.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
@@ -44,7 +35,21 @@ public class VehicleTypeDAO {
         return list;
     }
 
-    //upd
+    public VehicleType findById(int id) {
+        String sql = "SELECT * FROM vehicle_type WHERE id_vehicle_type = ?";
+        try (Connection conn = DbConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return new VehicleType(rs.getInt("id_vehicle_type"), rs.getString("description"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public boolean update(VehicleType vt) {
         String sql = "UPDATE vehicle_type SET description = ? WHERE id_vehicle_type = ?";
         try (Connection conn = DbConnection.getConnection();
@@ -58,7 +63,6 @@ public class VehicleTypeDAO {
         }
     }
 
-    //delete
     public boolean delete(int id) {
         String sql = "DELETE FROM vehicle_type WHERE id_vehicle_type = ?";
         try (Connection conn = DbConnection.getConnection();
@@ -66,7 +70,7 @@ public class VehicleTypeDAO {
             pstmt.setInt(1, id);
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.out.println("Error: No puedes borrar un tipo si tiene vehículos o tarifas asociados.");
+            System.out.println("Cannot delete vehicle type with associated records: " + e.getMessage());
             return false;
         }
     }

@@ -30,10 +30,11 @@
                 <input type="text" name="model">
 
                 <label>Tipo de Vehículo</label>
-                <select name="typeId">
-                    <option value="1">Automóvil</option>
-                    <option value="2">Motocicleta</option>
-                    <option value="3">Camión</option>
+                <select name="typeId" required>
+                    <option value="">-- Seleccione un tipo --</option>
+                    <c:forEach items="${vehicleTypes}" var="vt">
+                        <option value="${vt.idVehicleType}">${vt.description}</option>
+                    </c:forEach>
                 </select>
 
                 <label>Asignar Dueño (Cliente)</label>

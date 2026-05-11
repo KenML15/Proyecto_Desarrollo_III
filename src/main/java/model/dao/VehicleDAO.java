@@ -12,7 +12,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import model.entity.Vehicle;
-import model.entity.VehicleType;
 
 public class VehicleDAO {
 
@@ -73,8 +72,8 @@ public boolean insert(Vehicle v, int idType, int idCustomer) {
                 v.setColor(rs.getString("color"));
                 v.setBrand(rs.getString("brand"));
                 v.setModel(rs.getString("model"));
-                // IMPORTANTE: Carga el valor de la base de datos al objeto
                 v.setIdVehicleType(rs.getInt("id_vehicle_type"));
+                v.setIdCustomer(rs.getInt("id_customer"));
                 return v;
             }
         } catch (SQLException e) {

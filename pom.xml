@@ -33,6 +33,12 @@
             <artifactId>jstl</artifactId>
             <version>1.2</version>
         </dependency>
+        <!-- iText 5 para generación de reportes PDF -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.13.4</version>
+        </dependency>
     </dependencies>
     
     <build>

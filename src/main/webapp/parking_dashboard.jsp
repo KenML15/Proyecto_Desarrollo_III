@@ -61,8 +61,11 @@
                                 <a href="assignments?action=manageSlots&id=${p.id}" class="save btn-table">
                                     Configurar Espacios
                                 </a>
+                                <a href="assignments?action=list&lotId=${p.id}" class="btn-table btn-table--info">
+                                    &#x1F3AB; Ver Tiquetes
+                                </a>
                                 <a href="vehicles?action=list" class="btn-table btn-table--info" style="background-color: #f39c12;">
-                                    Editar Vehículos
+                                    Editar Veh&#xED;culos
                                 </a>
                             </div>
                         </td>

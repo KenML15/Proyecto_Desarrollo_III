@@ -1,4 +1,6 @@
 controller\ParkingLotController.class
+controller\RateController.class
+controller\VehicleTypeController.class
 controller\AssignmentController.class
 model\entity\Vehicle.class
 model\dao\SpaceDAO.class
@@ -21,6 +23,7 @@ model\entity\Rate.class
 model\entity\Space.class
 model\entity\VehicleType.class
 controller\CustomerController.class
+controller\ReportController.class
 Pruebas\MainTest.class
 model\entity\Customer.class
 model\data\JakartaRestConfiguration.class

@@ -44,9 +44,16 @@ public class VehicleController extends HttpServlet {
         if ("add".equalsIgnoreCase(action)) {
             model.dao.CustomerDAO customerDAO = new model.dao.CustomerDAO();
             List<model.entity.Customer> customerList = customerDAO.findAll();
+            List<VehicleType> typeList = typeDAO.readAll();
 
             request.setAttribute("customers", customerList);
+            request.setAttribute("vehicleTypes", typeList);
             request.getRequestDispatcher("insert_vehicle.jsp").forward(request, response);
+
+        } else if ("addType".equals(action)) {
+            String description = request.getParameter("description");
+            typeDAO.insert(description);
+            response.sendRedirect("vehicles?action=manageTypes");
 
             // Si la acción es eliminar
         } else if ("delete".equalsIgnoreCase(action)) {
@@ -61,6 +68,7 @@ public class VehicleController extends HttpServlet {
             model.dao.CustomerDAO customerDAO = new model.dao.CustomerDAO();
             request.setAttribute("vehicle", vehicle);
             request.setAttribute("customers", customerDAO.findAll());
+            request.setAttribute("vehicleTypes", typeDAO.readAll());
             request.getRequestDispatcher("edit_vehicle.jsp").forward(request, response);
 
             // POR DEFECTO: Mostrar la lista de gestión
@@ -92,11 +100,15 @@ public class VehicleController extends HttpServlet {
             String idCustStr = request.getParameter("idCustomer");
             int idCustomer = (idCustStr != null && !idCustStr.isEmpty()) ? Integer.parseInt(idCustStr) : 0;
 
-            Vehicle vehicle = new Vehicle(plate, color, brand, model);
+            Vehicle vehicle = new Vehicle(plate, color, brand, model, typeId);
             boolean success = false;
 
             if ("update".equalsIgnoreCase(action)) {
                 success = vehicleDAO.update(vehicle, typeId);
+                // Also update the customer assignment on edit
+                if (success) {
+                    vehicleDAO.assignCustomer(plate, idCustomer);
+                }
             } else {
                 // AHORA USA LOS 3 PARÁMETROS:
                 success = vehicleDAO.insert(vehicle, typeId, idCustomer);
@@ -104,7 +116,7 @@ public class VehicleController extends HttpServlet {
 
             // Si la inserción o actualización fue exitosa y se seleccionó un cliente
             if (success) {
-                if (idCustomer > 0) {
+                if ("insert".equalsIgnoreCase(action) && idCustomer > 0) {
                     vehicleDAO.assignCustomer(plate, idCustomer);
                 }
                 response.sendRedirect("vehicles");

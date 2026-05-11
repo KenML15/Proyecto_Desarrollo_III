@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import model.dao.VehicleDAO;
 import model.dao.ParkingLotDAO;
 import model.dao.AssignmentDAO;
+import model.dao.TicketDAO;
 import model.entity.Vehicle;
 import model.entity.ParkingLot;
 import model.entity.ParkingSpace;
@@ -21,6 +22,7 @@ public class AssignmentController extends HttpServlet {
     private VehicleDAO vehicleDAO = new VehicleDAO();
     private ParkingLotDAO parkingDAO = new ParkingLotDAO();
     private AssignmentDAO assignmentDAO = new AssignmentDAO();
+    private TicketDAO ticketDAO = new TicketDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -148,7 +150,22 @@ public class AssignmentController extends HttpServlet {
                 if (assignmentDAO.hasCapacity(idLot)) {
                     boolean success = assignmentDAO.insert(plate, idLot, slotNumber);
                     if (success) {
-                        response.sendRedirect("main_menu.html?msg=success");
+                        // Abrir ticket automáticamente al asignar el vehículo
+                        Vehicle vehicle = vehicleDAO.findByPlate(plate);
+                        int idCustomer = (vehicle != null && vehicle.getIdCustomer() > 0)
+                                ? vehicle.getIdCustomer() : 0;
+                        int newTicketId = -1;
+                        if (idCustomer > 0) {
+                            // Solo abrir si no hay ya un ticket activo para esta placa
+                            if (ticketDAO.findActiveTicketByPlate(plate) == -1) {
+                                newTicketId = ticketDAO.openTicket(idCustomer, plate);
+                            }
+                        }
+                        if (newTicketId > 0) {
+                            response.sendRedirect("tickets?action=viewEntry&ticketId=" + newTicketId + "&plate=" + plate + "&lotId=" + idLot + "&slot=" + slotNumber);
+                        } else {
+                            response.sendRedirect("assignments?action=list&msg=assigned");
+                        }
                     } else {
                         response.sendRedirect("assignments?action=prepare&error=db");
                     }

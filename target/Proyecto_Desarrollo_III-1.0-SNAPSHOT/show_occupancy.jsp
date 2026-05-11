@@ -47,11 +47,15 @@
                                 <span class="badge-parked">PARQUEADO</span>
                             </td>
                             <td>
-                                <%-- Modal JS en lugar de confirm() nativo --%>
-                                <button class="cancel btn-table"
-                                        onclick="confirmarSalida('${pageContext.request.contextPath}/assignments?action=release&id=${a.id}', '${a.plateVehicle}')">
-                                    Registrar Salida
-                                </button>
+                                <div class="btn-group">
+                                    <a href="${pageContext.request.contextPath}/tickets?action=viewActive&amp;plate=${a.plateVehicle}"
+                                       class="save btn-table btn-table--info">&#x1F3AB; Ver Ticket</a>
+                                    <form action="${pageContext.request.contextPath}/tickets" method="POST" style="display:inline;">
+                                        <input type="hidden" name="action" value="salida"/>
+                                        <input type="hidden" name="plate" value="${a.plateVehicle}"/>
+                                        <button type="submit" class="cancel btn-table">&#x2B06; Registrar Salida</button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     </c:forEach>
